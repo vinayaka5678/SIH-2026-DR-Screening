@@ -117,7 +117,59 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 **Status**
 - Phase 1: **COMPLETED**
-- Awaiting user approval to proceed to Phase 2
+- Phase 2: **IN PROGRESS** (Environment setup completed)
+
+---
+
+## [Unreleased]
+
+### Phase 2: AI Training & Model Conversion (In Progress)
+
+#### [2026-08-31] - Python ML Environment Setup Completed
+
+**Environment Created**
+- Python virtual environment: `ml_training/venv_ml/`
+- Python 3.13.1
+- Total packages installed: 150+
+- Virtual environment size: ~1.2 GB
+
+**Core ML Packages Installed**
+- TensorFlow 2.21.0
+- Keras 3.15.1
+- NumPy 2.5.2
+- Pandas 3.0.5
+- SciPy 1.18.1
+- Scikit-learn 1.9.0
+
+**Image Processing**
+- OpenCV 5.0.0.93
+- Pillow 12.3.0
+- Albumentations 2.0.8 (augmentation)
+
+**Visualization & Development**
+- Matplotlib 3.11.1
+- Seaborn 0.13.2
+- Jupyter Lab 4.6.3
+- Jupyter Notebook 7.6.2
+- tf-keras-vis 0.8.7 (Grad-CAM visualization)
+
+**Documentation Created**
+- `ml_training/DATASET_DOWNLOAD.md` - Manual dataset download instructions for APTOS 2019, IDRiD, EyePACS
+- `ml_training/PHASE2_PROGRESS.md` - Phase 2 progress tracking
+- `ml_training/src/verify_dataset.py` - Dataset integrity verification script
+
+**TensorFlow Configuration**
+- TensorFlow 2.21.0 with oneDNN optimization
+- GPU: Not available on native Windows (WSL2 or TensorFlow-DirectML required)
+- Training: Will use Google Colab with GPU for model training
+- Local: CPU-only for development and testing
+
+**Status**
+- Phase 2A (Environment Setup): ✅ COMPLETED
+- Phase 2B (Dataset Acquisition): ⏳ PENDING (User must manually download APTOS 2019)
+- Phase 2C (Training Scripts): ⏳ PENDING
+- Phase 2D (Model Training): ⏳ PENDING
+- Phase 2E (Model Conversion): ⏳ PENDING
 
 ---
 
