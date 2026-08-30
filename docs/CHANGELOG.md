@@ -166,10 +166,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 **Status**
 - Phase 2A (Environment Setup): ✅ COMPLETED
-- Phase 2B (Dataset Acquisition): ⏳ PENDING (User must manually download APTOS 2019)
-- Phase 2C (Training Scripts): ⏳ PENDING
-- Phase 2D (Model Training): ⏳ PENDING
+- Phase 2B (Dataset Verification): ✅ COMPLETED (APTOS 2019, 3,662 images verified)
+- Phase 2C (Training Scripts & Pipeline): ✅ COMPLETED (Lightweight tests passed)
+- Phase 2D (Model Training): ⏳ PENDING (Awaiting user approval)
 - Phase 2E (Model Conversion): ⏳ PENDING
+
+#### [2026-08-31] - Phase 2C: Training Pipeline Scripts & Google Colab Notebook Completed
+
+**Added**
+- `ml_training/src/data_preprocessing.py` - Binary label conversion, stratified 70/15/15 split, Lanczos4 224×224 resize, NPZ export
+- `ml_training/src/train_model.py` - EfficientNet-Lite0 dual-output architecture (classification + GAP-CAM feature maps), synthetic domain shift augmentation, class weighting, callbacks
+- `ml_training/src/export_tflite.py` - INT8 post-training quantization, dense layer weight extraction for zero-backprop GAP-CAM, deployment bundle metadata
+- `ml_training/notebooks/train_dr_model.ipynb` - Google Colab GPU-accelerated training workflow
+- `ml_training/src/test_pipeline_lightweight.py` - End-to-end pipeline validation on 50 sample images
+- `ml_training/PHASE2C_REPORT.md` - Phase 2C comprehensive architecture & test report
+
+**Validation Performed**
+- Binary label conversion verified across all 5 ICDR grades (0→0, 1-4→1)
+- Stratified splitting verified: 2,563 train (70.0%), 549 val (15.0%), 550 test (15.0%)
+- Disjoint set verification: 0% overlap, zero data leakage
+- Dual-output model compilation & single-epoch pass verified on CPU
+- GAP-CAM dense weights extraction verified (1280 weights extracted, heatmap calculated)
+- INT8 quantization verified: 6.82 MB TFLite model generated, uint8 input/output validated
 
 ---
 
