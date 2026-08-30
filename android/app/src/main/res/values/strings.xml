@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- English strings -->
+    <string name="app_name">DR Screening</string>
+    <string name="app_tagline">Offline AI for Diabetic Retinopathy Screening</string>
+
+    <!-- Home Screen -->
+    <string name="home_title">DR Screening</string>
+    <string name="home_subtitle">Karnataka PHC Screening Program</string>
+
+    <!-- Common -->
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="retry">Retry</string>
+
+    <!-- Feature placeholders -->
+    <string name="feature_camera">Camera Capture</string>
+    <string name="feature_screening">Start Screening</string>
+    <string name="feature_history">Screening History</string>
+    <string name="feature_settings">Settings</string>
+</resources>

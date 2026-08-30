@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Kannada (ಕನ್ನಡ) strings -->
+    <string name="app_name">ಡಿಆರ್ ಪರೀಕ್ಷೆ</string>
+    <string name="app_tagline">ಮಧುಮೇಹ ರೆಟಿನೋಪತಿ ಪರೀಕ್ಷೆಗೆ ಆಫ್‌ಲೈನ್ AI</string>
+
+    <!-- Home Screen -->
+    <string name="home_title">ಡಿಆರ್ ಪರೀಕ್ಷೆ</string>
+    <string name="home_subtitle">ಕರ್ನಾಟಕ PHC ಪರೀಕ್ಷಾ ಕಾರ್ಯಕ್ರಮ</string>
+
+    <!-- Common -->
+    <string name="ok">ಸರಿ</string>
+    <string name="cancel">ರದ್ದುಮಾಡಿ</string>
+    <string name="retry">ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ</string>
+
+    <!-- Feature placeholders -->
+    <string name="feature_camera">ಕ್ಯಾಮೆರಾ ಸೆರೆಹಿಡಿಯಿರಿ</string>
+    <string name="feature_screening">ಪರೀಕ್ಷೆ ಪ್ರಾರಂಭಿಸಿ</string>
+    <string name="feature_history">ಪರೀಕ್ಷಾ ಇತಿಹಾಸ</string>
+    <string name="feature_settings">ಸಂಯೋಜನೆಗಳು</string>
+</resources>
