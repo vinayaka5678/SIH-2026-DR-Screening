@@ -1,0 +1,73 @@
+# Android Studio / IntelliJ IDEA
+.idea/
+*.iml
+.gradle/
+local.properties
+
+# Android Build
+build/
+*/build/
+*.apk
+*.aab
+*.dex
+*.class
+
+# Gradle
+.gradle/
+gradle-app.setting
+
+# Python Virtual Environment
+venv_ml/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Machine Learning
+*.h5
+*.hdf5
+*.pb
+*.pth
+*.onnx
+*.tflite
+models/
+datasets/
+checkpoints/
+*.weights
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+*.ipynb
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+
+# Large dataset files (download separately)
+*.zip
+*.tar
+*.tar.gz
+*.csv
+!requirements.txt
+
+# Secrets and credentials
+*.key
+*.pem
+secrets.json
+credentials.json
