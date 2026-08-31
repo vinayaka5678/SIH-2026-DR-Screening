@@ -47,10 +47,10 @@ def test_label_conversion(csv_path: Path):
         expected_binary = 0 if grade == 0 else 1
         actual_binaries = subset['binary_label'].unique()
         assert len(actual_binaries) == 1 and actual_binaries[0] == expected_binary, \
-            f"❌ Label conversion failed for diagnosis grade {grade}"
-        print(f"  Diagnosis {grade} ({len(subset):4d} images) -> Binary {actual_binaries[0]} (Expected: {expected_binary}) ✅")
+            f"Label conversion failed for diagnosis grade {grade}"
+        print(f"  Diagnosis {grade} ({len(subset):4d} images) -> Binary {actual_binaries[0]} (Expected: {expected_binary}) OK")
 
-    print("✅ Label conversion test PASSED: 0=No DR, 1-4=DR Present.")
+    print("Label conversion test PASSED: 0=No DR, 1-4=DR Present.")
 
 
 def test_stratified_split_and_leakage(csv_path: Path):
@@ -78,7 +78,7 @@ def test_stratified_split_and_leakage(csv_path: Path):
     print(f"  Train: {len(train_df)} ({len(train_df)/len(df)*100:.1f}%), DR %: {train_df['binary_label'].mean()*100:.1f}%")
     print(f"  Val:   {len(val_df)} ({len(val_df)/len(df)*100:.1f}%), DR %: {val_df['binary_label'].mean()*100:.1f}%")
     print(f"  Test:  {len(test_df)} ({len(test_df)/len(df)*100:.1f}%), DR %: {test_df['binary_label'].mean()*100:.1f}%")
-    print("✅ Split test PASSED: 100% disjoint, zero leakage, balanced stratification.")
+    print("OK Split test PASSED: 100% disjoint, zero leakage, balanced stratification.")
 
 
 def test_preprocessing_and_model_pipeline(data_dir: Path, temp_dir: Path):
@@ -117,7 +117,7 @@ def test_preprocessing_and_model_pipeline(data_dir: Path, temp_dir: Path):
 
     assert X.shape == (50, 224, 224, 3), f"Wrong X shape: {X.shape}"
     assert X.min() >= 0.0 and X.max() <= 1.0, "Normalization out of [0, 1] range"
-    print(f"  Preprocessed X: shape={X.shape}, dtype={X.dtype}, min={X.min():.2f}, max={X.max():.2f} ✅")
+    print(f"  Preprocessed X: shape={X.shape}, dtype={X.dtype}, min={X.min():.2f}, max={X.max():.2f} OK")
 
     # Build dual-output model
     print("\n  Building EfficientNet Dual-Output Model...")
@@ -157,7 +157,7 @@ def test_preprocessing_and_model_pipeline(data_dir: Path, temp_dir: Path):
         batch_size=16,
         verbose=0
     )
-    print(f"  Epoch 1 Loss: {hist.history['loss'][0]:.4f}, Accuracy: {hist.history['classification_accuracy'][0]:.4f} ✅")
+    print(f"  Epoch 1 Loss: {hist.history['loss'][0]:.4f}, Accuracy: {hist.history['classification_accuracy'][0]:.4f} OK")
 
     # GAP-CAM Weight Extraction & Computation Verification
     print("\n" + "=" * 60)
@@ -188,7 +188,7 @@ def test_preprocessing_and_model_pipeline(data_dir: Path, temp_dir: Path):
 
     print(f"  Prediction probability: {pred_prob:.4f}")
     print(f"  Feature maps shape: {f_maps.shape}")
-    print(f"  GAP-CAM Heatmap shape: {cam_heatmap.shape}, min={cam_heatmap.min():.2f}, max={cam_heatmap.max():.2f} ✅")
+    print(f"  GAP-CAM Heatmap shape: {cam_heatmap.shape}, min={cam_heatmap.min():.2f}, max={cam_heatmap.max():.2f} OK")
 
     # INT8 Quantization test
     print("\n" + "=" * 60)
@@ -236,7 +236,7 @@ def test_preprocessing_and_model_pipeline(data_dir: Path, temp_dir: Path):
     out_scale, out_zero_pt = out_det['quantization']
     tflite_pred = (float(q_out[0, 0]) - out_zero_pt) * out_scale
     print(f"  TFLite INT8 output probability: {tflite_pred:.4f} (Keras float32: {pred_prob:.4f})")
-    print("✅ INT8 Quantization test PASSED.")
+    print("OK INT8 Quantization test PASSED.")
 
 
 def main():
@@ -250,7 +250,7 @@ def main():
         test_stratified_split_and_leakage(csv_path)
         test_preprocessing_and_model_pipeline(data_dir, temp_dir)
         print("\n" + "=" * 60)
-        print("🎉 ALL LIGHTWEIGHT PIPELINE TESTS PASSED SUCCESSFULLY!")
+        print("SUCCESS! ALL LIGHTWEIGHT PIPELINE TESTS PASSED SUCCESSFULLY!")
         print("=" * 60)
     finally:
         shutil.rmtree(temp_dir, ignore_errors=True)

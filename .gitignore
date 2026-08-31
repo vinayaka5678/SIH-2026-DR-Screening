@@ -71,3 +71,13 @@ Thumbs.db
 *.pem
 secrets.json
 credentials.json
+.claude/
+# Patient uploads, DB, reports, ML data, models, venv, session config
+app/database/*.db
+app/uploads/
+app/reports/
+ml_training/data/
+ml_training/processed_data/
+ml_training/models/*/*.keras
+ml_training/venv_ml/
+ml_training/android_model/

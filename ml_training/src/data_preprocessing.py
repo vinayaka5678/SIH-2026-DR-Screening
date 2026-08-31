@@ -58,7 +58,7 @@ def load_dataset_metadata(data_dir: Path, dataset_name: str) -> Tuple[pd.DataFra
         if len(missing) > 0:
             raise FileNotFoundError(f"{len(missing)} images missing from dataset")
 
-        print(f"✅ Loaded {len(df)} images from {dataset_name}")
+        print(f"OK Loaded {len(df)} images from {dataset_name}")
         print(f"   Binary label distribution:")
         print(f"     No DR (0):      {(df['binary_label'] == 0).sum()} images")
         print(f"     DR Present (1): {(df['binary_label'] == 1).sum()} images")
@@ -102,7 +102,7 @@ def create_stratified_splits(
         random_state=random_state
     )
 
-    print(f"\n✅ Created stratified splits:")
+    print(f"\nOK Created stratified splits:")
     print(f"   Train:      {len(train_df):4d} images ({len(train_df)/len(df)*100:.1f}%)")
     print(f"   Validation: {len(val_df):4d} images ({len(val_df)/len(df)*100:.1f}%)")
     print(f"   Test:       {len(test_df):4d} images ({len(test_df)/len(df)*100:.1f}%)")
@@ -121,9 +121,9 @@ def create_stratified_splits(
     test_ids = set(test_df['id_code'])
 
     if len(train_ids & val_ids) > 0 or len(train_ids & test_ids) > 0 or len(val_ids & test_ids) > 0:
-        raise ValueError("❌ DATA LEAKAGE DETECTED: Splits have overlapping image IDs")
+        raise ValueError("FAIL DATA LEAKAGE DETECTED: Splits have overlapping image IDs")
 
-    print(f"   ✅ No data leakage detected (splits are disjoint)")
+    print(f"   OK No data leakage detected (splits are disjoint)")
 
     return train_df, val_df, test_df
 
@@ -183,7 +183,7 @@ def preprocess_split(
     labels = []
     image_ids = []
 
-    print(f"\n🔄 Preprocessing {split_name} split ({len(df)} images)...")
+    print(f"\nPROCESSING: Preprocessing {split_name} split ({len(df)} images)...")
 
     for idx, row in tqdm(df.iterrows(), total=len(df), desc=f"  {split_name}"):
         try:
@@ -192,7 +192,7 @@ def preprocess_split(
             labels.append(row['binary_label'])
             image_ids.append(row['id_code'])
         except Exception as e:
-            print(f"  ⚠️  Failed to process {row['id_code']}: {e}")
+            print(f"  WARNING:  Failed to process {row['id_code']}: {e}")
             continue
 
     images = np.array(images, dtype=np.float32)
@@ -207,7 +207,7 @@ def preprocess_split(
         image_ids=image_ids
     )
 
-    print(f"   ✅ Saved {len(images)} preprocessed images to {output_path}")
+    print(f"   OK Saved {len(images)} preprocessed images to {output_path}")
     print(f"      File size: {output_path.stat().st_size / (1024**2):.1f} MB")
     print(f"      Image shape: {images.shape}")
     print(f"      Labels shape: {labels.shape}")
@@ -334,7 +334,7 @@ def main():
     with open(metadata_path, 'w') as f:
         json.dump(metadata, f, indent=2)
 
-    print(f"\n✅ Preprocessing complete!")
+    print(f"\nOK Preprocessing complete!")
     print(f"   Metadata saved to: {metadata_path}")
     print()
     print("=" * 70)

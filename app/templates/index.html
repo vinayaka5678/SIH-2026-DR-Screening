@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5, viewport-fit=cover">
+<meta name="description" content="AI-powered diabetic retinopathy screening with explainable GAP-CAM" />
+<title>DR Screening - AI-Powered Retinopathy Screening</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,400;1,9..40,300&display=swap');
+
+:root {
+  --primary: #0a6e77;
+  --primary-deep: #084952;
+  --primary-light: #e6f3f4;
+  --accent: #00a8a8;
+  --danger: #c73e3e;
+  --danger-soft: #ffeaea;
+  --safe: #1b8e4b;
+  --safe-soft: #eaf6ef;
+  --warn: #d48a2a;
+  --bg: #f7f9fb;
+  --surface: #ffffff;
+  --surface-2: #f1f5f7;
+  --text: #0f1b21;
+  --text-secondary: #566674;
+  --text-subtle: #8da0ad;
+  --border: #dde5ea;
+  --shadow: 0 1px 3px rgba(15,27,33,0.06), 0 4px 16px rgba(15,27,33,0.05);
+  --shadow-lg: 0 8px 32px rgba(15,27,33,0.1);
+  --radius: 18px;
+  --radius-sm: 10px;
+  --transition: all .22s ease;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; -webkit-font-smoothing: antialiased; }
+body { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.55; min-height: 100vh; overflow-x: hidden; }
+
+/* LOGIN */
+.login-body { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: linear-gradient(160deg, #084952 0%, #0a6e77 40%, #00a8a8 100%); padding: 1.2rem; }
+.login-card { background: var(--surface); border-radius: 28px; padding: 2.2rem 2rem; max-width: 420px; width: 100%; box-shadow: var(--shadow-lg), 0 0 0 1px rgba(255,255,255,.06); animation: fadeUp 0.6s ease; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+.login-card .logo { width: 64px; height: 64px; border-radius: 22px; background: linear-gradient(135deg, var(--primary), var(--accent)); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.2rem; box-shadow: 0 8px 24px rgba(10,110,119,0.25); }
+.login-card .logo svg { width: 32px; height: 32px; stroke: white; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.login-card h1 { text-align: center; font-size: 1.65rem; font-weight: 800; letter-spacing: -0.6px; margin-bottom: .25rem; color: var(--text); line-height: 1.2; }
+.login-card .subtitle { text-align: center; color: var(--text-secondary); font-size: .92rem; margin-bottom: 1.6rem; font-family: 'DM Sans', sans-serif; }
+.login-card form { display: flex; flex-direction: column; gap: .85rem; }
+.login-card label { font-size: .78rem; font-weight: 600; color: var(--text-secondary); letter-spacing: .3px; }
+.login-card input { padding: .75rem .9rem; border-radius: 12px; border: 1.5px solid var(--border); font-size: .95rem; background: var(--surface); transition: var(--transition); outline: none; }
+.login-card input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(10,110,119,0.08); }
+.login-card .row { display: flex; align-items: center; justify-content: space-between; gap: .5rem; font-size: .82rem; color: var(--text-subtle); }
+.login-card .remember { display: flex; align-items: center; gap: .35rem; cursor: pointer; }
+.login-card .remember input { width: 14px; height: 14px; accent-color: var(--primary); }
+.login-card button[type="submit"] { padding: .85rem; border-radius: 12px; background: linear-gradient(135deg, var(--primary), var(--primary-deep)); color: #fff; font-weight: 700; font-size: 1rem; letter-spacing: .2px; border: none; cursor: pointer; box-shadow: 0 6px 20px rgba(10,110,119,0.25); transition: var(--transition); margin-top: .35rem; }
+.login-card button[type="submit"]:hover { filter: brightness(1.08); }
+.login-card .forgot { text-align: center; font-size: .82rem; color: var(--primary); text-decoration: none; margin-top: .2rem; display: block; }
+.login-card .security { text-align: center; margin-top: 1.2rem; font-size: .72rem; color: var(--text-subtle); letter-spacing: .15px; }
+.login-card .error-msg { background: var(--danger-soft); color: var(--danger); padding: .7rem .9rem; border-radius: 10px; font-size: .84rem; margin-bottom: .3rem; display: none; }
+.login-card .error-msg.show { display: block; }
+
+/* APP SHELL */
+.app-shell { display: flex; flex-direction: column; min-height: 100vh; }
+.app-topbar { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.92); backdrop-filter: blur(14px); border-bottom: 1px solid rgba(0,0,0,.05); padding: .7rem 1rem; display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+.app-topbar .brand { font-weight: 800; font-size: 1.05rem; letter-spacing: -0.4px; color: var(--text); }
+.app-topbar .brand span { color: var(--primary); }
+.app-topbar .meta { font-size: .75rem; color: var(--text-subtle); font-family: 'DM Sans', sans-serif; }
+.app-topbar .avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent)); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: .8rem; box-shadow: 0 2px 8px rgba(10,110,119,0.2); border: none; cursor: pointer; }
+.app-body { flex: 1; padding: .9rem .8rem 6rem; max-width: 900px; margin: 0 auto; width: 100%; }
+
+/* BOTTOM NAV */
+.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 200; background: rgba(255,255,255,0.96); backdrop-filter: blur(14px); border-top: 1px solid rgba(0,0,0,.05); display: flex; justify-content: space-around; align-items: center; padding: .35rem .2rem; padding-bottom: max(.35rem, env(safe-area-inset-bottom)); box-shadow: 0 -6px 24px rgba(0,0,0,.04); }
+.bottom-nav a { flex: 1; display: flex; flex-direction: column; align-items: center; gap: .15rem; padding: .3rem .15rem; border-radius: 10px; color: var(--text-subtle); text-decoration: none; font-size: .65rem; font-weight: 600; transition: var(--transition); }
+.bottom-nav a.active { color: var(--primary); background: var(--primary-light); }
+.bottom-nav a.cta { background: linear-gradient(135deg, var(--primary), var(--primary-deep)); color: #fff; margin: -1rem .3rem 0; padding: .55rem .15rem; border-radius: 14px; box-shadow: 0 6px 18px rgba(10,110,119,0.3); }
+.bottom-nav a.cta.active { color: #fff; background: linear-gradient(135deg, var(--primary-deep), var(--primary)); }
+.bottom-nav a .nav-icon { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.bottom-nav a.cta .nav-icon { width: 26px; height: 26px; }
+
+/* CARDS */
+.card { background: var(--surface); border-radius: var(--radius); padding: 1rem 1.1rem; box-shadow: var(--shadow); border: 1px solid rgba(0,0,0,.03); transition: var(--transition); }
+.card h2 { font-size: .78rem; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; color: var(--text-subtle); margin-bottom: .6rem; }
+
+/* STATS */
+.stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: .55rem; margin-bottom: .8rem; }
+.stat-card { background: var(--surface); border-radius: 14px; padding: .8rem .85rem; box-shadow: var(--shadow); border: 1px solid rgba(0,0,0,.03); position: relative; overflow: hidden; }
+.stat-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; }
+.stat-card.patients::before { background: var(--primary); }
+.stat-card.screenings::before { background: var(--accent); }
+.stat-card.safe::before { background: var(--safe); }
+.stat-card.risk::before { background: var(--danger); }
+.stat-card .label { font-size: .68rem; color: var(--text-subtle); font-weight: 600; text-transform: uppercase; letter-spacing: .4px; }
+.stat-card .value { font-size: 1.5rem; font-weight: 800; letter-spacing: -1px; line-height: 1.1; margin-top: .12rem; }
+
+/* BUTTONS */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: .45rem; padding: .7rem 1.1rem; border-radius: 12px; border: none; font-weight: 700; font-size: .9rem; cursor: pointer; transition: var(--transition); text-decoration: none; letter-spacing: .15px; }
+.btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-deep)); color: #fff; box-shadow: 0 4px 14px rgba(10,110,119,0.25); }
+.btn-primary:hover { filter: brightness(1.05); }
+.btn-secondary { background: var(--surface-2); color: var(--text); border: 1px solid var(--border); }
+.btn-danger { background: var(--danger); color: #fff; }
+.btn-sm { padding: .45rem .8rem; font-size: .82rem; border-radius: 9px; }
+.btn-block { width: 100%; }
+
+/* FORMS */
+.form-group { margin-bottom: .65rem; }
+.form-group label { display: block; font-size: .78rem; font-weight: 600; color: var(--text-secondary); margin-bottom: .2rem; letter-spacing: .2px; }
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: .65rem .8rem; border-radius: 10px; border: 1.5px solid var(--border); background: var(--surface); font-size: .92rem; transition: var(--transition); outline: none; font-family: inherit; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(10,110,119,0.08); }
+.form-group .err { font-size: .72rem; color: var(--danger); margin-top: .15rem; min-height: .85rem; }
+.form-row { display: flex; gap: .55rem; flex-wrap: wrap; }
+.form-row > * { flex: 1; min-width: 0; }
+.form-error { background: var(--danger-soft); color: var(--danger); padding: .55rem .7rem; border-radius: 10px; font-size: .82rem; margin-bottom: .5rem; display: none; }
+.form-error.show { display: block; }
+
+/* RECENT SCREENINGS CARDS */
+.screening-card { background: var(--surface); border-radius: 14px; padding: .85rem .9rem; margin-bottom: .5rem; border: 1px solid rgba(0,0,0,.04); box-shadow: var(--shadow); display: flex; align-items: center; gap: .75rem; transition: var(--transition); cursor: pointer; text-decoration: none; color: inherit; }
+.screening-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-1px); }
+.screening-card .sc-icon { width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+.screening-card .sc-icon.ok { background: var(--safe-soft); color: var(--safe); }
+.screening-card .sc-icon.risk { background: var(--danger-soft); color: var(--danger); }
+.screening-card h4 { font-size: .88rem; font-weight: 700; margin-bottom: .1rem; letter-spacing: -0.2px; }
+.screening-card p { font-size: .74rem; color: var(--text-subtle); margin: 0; }
+.screening-card .sc-meta { flex: 1; min-width: 0; }
+.screening-card .sc-badge { font-size: .68rem; padding: .13rem .4rem; border-radius: 20px; font-weight: 700; display: inline-block; margin-top: .12rem; white-space: nowrap; }
+.screening-card .sc-badge.ok { background: var(--safe-soft); color: var(--safe); }
+.screening-card .sc-badge.risk { background: var(--danger-soft); color: var(--danger); }
+
+/* LIST CARDS */
+.list-card { display: flex; align-items: center; gap: .7rem; padding: .7rem .85rem; background: var(--surface); border-radius: 14px; border: 1px solid rgba(0,0,0,.04); box-shadow: var(--shadow); margin-bottom: .45rem; transition: var(--transition); cursor: pointer; }
+.list-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-1px); }
+.list-card .lc-avatar { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent)); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: .85rem; flex-shrink: 0; }
+.list-card h4 { font-size: .9rem; font-weight: 700; margin-bottom: .08rem; letter-spacing: -0.2px; }
+.list-card p { font-size: .73rem; color: var(--text-subtle); margin: 0; }
+.list-card .lc-meta { flex: 1; min-width: 0; }
+
+/* RESULT BANNER */
+.result-banner { border-radius: 16px; padding: 1.1rem .9rem; text-align: center; margin: .8rem 0; }
+.result-banner.ok { background: linear-gradient(135deg, var(--safe-soft), #f0f8f4); border-left: 4px solid var(--safe); }
+.result-banner.risk { background: linear-gradient(135deg, var(--danger-soft), #fcf6f6); border-left: 4px solid var(--danger); }
+.result-banner h3 { font-size: 1.1rem; font-weight: 800; margin-bottom: .25rem; letter-spacing: -0.4px; }
+.result-banner.ok h3 { color: var(--safe); }
+.result-banner.risk h3 { color: var(--danger); }
+.result-banner .prob-large { font-size: 1.8rem; font-weight: 900; letter-spacing: -2px; line-height: 1; margin: .25rem 0 .12rem; }
+.result-banner .label-small { font-size: .76rem; color: var(--text-subtle); font-family: 'DM Sans', sans-serif; }
+
+/* GAP CAM */
+.gapcam-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
+.gapcam-grid img { width: 100%; border-radius: 10px; border: 1px solid var(--border); background: #000; }
+.gapcam-label { font-size: .68rem; color: var(--text-subtle); text-align: center; margin-top: .15rem; font-family: 'DM Sans', sans-serif; }
+
+/* MODAL */
+.modal-overlay { position: fixed; inset: 0; background: rgba(15,27,33,0.5); z-index: 400; display: none; align-items: center; justify-content: center; padding: 1rem; backdrop-filter: blur(4px); }
+.modal-overlay.open { display: flex; }
+.modal-card { background: var(--surface); border-radius: 20px; padding: 1.4rem 1.2rem; max-width: 400px; width: 100%; box-shadow: var(--shadow-lg); animation: fadeUp 0.25s ease; max-height: 90vh; overflow-y: auto; }
+.modal-card h3 { font-size: 1.05rem; font-weight: 800; margin-bottom: .3rem; letter-spacing: -0.3px; }
+.modal-card p { font-size: .85rem; color: var(--text-secondary); margin-bottom: 1rem; }
+.modal-card .modal-actions { display: flex; gap: .5rem; justify-content: flex-end; flex-wrap: wrap; }
+
+/* TOAST */
+#toast-container { position: fixed; bottom: 5.5rem; left: 50%; transform: translateX(-50%); z-index: 500; display: flex; flex-direction: column; gap: .5rem; align-items: center; pointer-events: none; width: calc(100% - 2rem); max-width: 400px; }
+.toast { background: var(--text); color: #fff; padding: .7rem 1rem; border-radius: 12px; font-size: .85rem; font-weight: 600; box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: .5rem; animation: toastIn 0.25s ease; pointer-events: auto; }
+.toast.ok { background: var(--safe); }
+.toast.err { background: var(--danger); }
+@keyframes toastIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+/* EMPTY / LOADING */
+.empty-state { text-align: center; padding: 1.8rem .5rem; color: var(--text-subtle); }
+.empty-state h3 { font-size: .95rem; color: var(--text-subtle); font-weight: 600; margin-bottom: .25rem; }
+.empty-state p { font-size: .82rem; margin-bottom: .7rem; }
+.empty-state .ic { font-size: 2rem; opacity: .4; margin-bottom: .4rem; }
+.loading { display: flex; align-items: center; gap: .5rem; color: var(--text-secondary); font-size: .85rem; padding: .8rem 0; }
+.spinner { width: 18px; height: 18px; border: 2.5px solid var(--primary-light); border-top-color: var(--primary); border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* HEADINGS */
+.page-title { font-size: 1.05rem; letter-spacing: -0.4px; font-weight: 800; }
+.page-title-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: .7rem; gap: .5rem; flex-wrap: wrap; }
+
+/* SCREENING DETAIL */
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
+.detail-item { background: var(--surface-2); padding: .55rem .65rem; border-radius: 10px; }
+.detail-item .lbl { font-size: .68rem; color: var(--text-subtle); font-weight: 600; text-transform: uppercase; letter-spacing: .4px; }
+.detail-item .val { font-size: .9rem; font-weight: 700; margin-top: .12rem; word-break: break-word; }
+.detail-item .val.lg { font-size: 1.1rem; }
+.detail-img { width: 100%; border-radius: 12px; border: 1px solid var(--border); background: #000; }
+
+/* PROFILE PAGE */
+.profile-header { display: flex; align-items: center; gap: .8rem; margin-bottom: .9rem; }
+.profile-avatar { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent)); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.4rem; }
+.profile-name { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.4px; }
+.profile-id { font-size: .78rem; color: var(--text-subtle); }
+
+/* RESPONSIVE */
+@media (min-width: 640px) { .stats { grid-template-columns: repeat(4, 1fr); } .gapcam-grid { grid-template-columns: 1fr 1fr; } .detail-grid { grid-template-columns: 1fr 1fr 1fr 1fr; } }
+@media (max-width: 400px) { .login-card { padding: 1.6rem 1rem; border-radius: 20px; } .app-topbar { padding: .65rem .7rem; } .app-body { padding: .7rem .6rem 6rem; } .stats { grid-template-columns: 1fr 1fr; } }
+</style>
+</head>
+<body>
+
+<!-- FIREBASE SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-auth-compat.js"></script>
+<script src="/static/firebase-config.js"></script>
+<script src="/static/auth.js"></script>
+
+<!-- LOGIN -->
+<div id="login-page" class="login-body" style="display:flex;">
+  <div class="login-card">
+    <div class="logo" aria-label="Logo">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="10"/><path d="M8 16l6-6 6 6"/></svg>
+    </div>
+    <h1>DR Screening</h1>
+    <p class="subtitle">AI-Powered Diabetic Retinopathy Screening</p>
+
+    <!-- Auth toggle -->
+    <div style="display:flex;gap:.5rem;justify-content:center;margin-bottom:1rem;font-size:.8rem;">
+      <button onclick="setAuthMode('login')" id="btn-mode-login" class="btn btn-sm" style="border-radius:20px;padding:.35rem .7rem;background:var(--primary);color:#fff;border:none;font-weight:600;">Login</button>
+      <button onclick="setAuthMode('signup')" id="btn-mode-signup" class="btn btn-sm" style="border-radius:20px;padding:.35rem .7rem;background:transparent;color:var(--text-secondary);border:1px solid var(--border);font-weight:600;">Sign Up</button>
+    </div>
+
+    <form id="auth-form" onsubmit="handleFirebaseAuth(event)">
+      <div class="form-error" id="auth-error"></div>
+
+      <!-- Sign-up fields -->
+      <div id="auth-signup-fields" style="display:none;">
+        <div class="form-group">
+          <label for="auth-name">Clinician Name</label>
+          <input type="text" id="auth-name" name="name" placeholder="Dr. A. Patel" autocomplete="name" />
+        </div>
+      </div>
+
+      <!-- Shared fields -->
+      <div class="form-group">
+        <label for="auth-email">Email</label>
+        <input type="email" id="auth-email" name="email" placeholder="doctor@clinic.org" required autocomplete="email" />
+      </div>
+      <div class="form-group">
+        <label for="auth-password">Password</label>
+        <input type="password" id="auth-password" name="password" placeholder="Enter your password" required autocomplete="current-password" />
+      </div>
+
+      <div class="row" style="margin-bottom:.6rem;">
+        <label class="remember" style="font-size:.82rem;color:var(--text-subtle);"><input type="checkbox" id="remember" /> Remember me</label>
+        <a href="#" onclick="event.preventDefault();showResetModal();" class="forgot" style="font-size:.82rem;color:var(--primary);">Forgot password?</a>
+      </div>
+
+      <button type="submit" id="auth-submit-btn" class="btn btn-primary btn-block" style="margin-top:.2rem;">Log In</button>
+    </form>
+
+    <div style="margin-top:.8rem;">
+      <button onclick="handleGoogleAuth()" class="btn btn-secondary btn-block" style="border-radius:10px;display:flex;align-items:center;justify-content:center;gap:.4rem;padding:.7rem 1rem;font-size:.85rem;font-weight:600;">
+        <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M9 3.48c1.4 0 2.58.48 3.5 1.3l2.3-2.3C13.1 1.2 11.2.7 9 .7 5.9.7 3.2 2.5 2.2 5l2.6 1.9c.4-1.1 1.3-1.9 2.5-1.9z" fill="#4285F4"/><path d="M17.6 9.3c-.2-.6-.7-1.1-1.3-1.4V6.5h-.4l-2.7 2h-.7l-.3-.3-.4-.9c.6-.6 1-1.4 1-2.3 0-.3-.1-.6-.2-.9.1-.2.2-.5.2-.8 0-.3-.1-.6-.2-.9-.3-.8-.9-1.4-1.6-1.6V2c.6 0 1.2.1 1.8.2L14.5 4.2c.4-.2.9-.3 1.4-.3 1.1 0 2 .6 2.6 1.4-.7.2-1.3.6-1.9 1.2z" fill="#34A853"/><path d="M9 14.3c.7 0 1.3-.1 1.9-.4l2.4 2.4c-.7.4-1.6.6-2.5.6-2.2 0-4.1-1.3-4.9-3.1l-2.6 1.9c1.1 1.6 2.9 2.7 5.1 2.7 2.4 0 4.5-1.1 5.5-2.7l-2.6-1.9c-.7.5-1.6.7-2.5.7-1.3 0-2.4-.6-3.1-1.4l-.7-.4-2.6 1.9c.3.8.7 1.5 1.2 2.1l.6.5z" fill="#FBBC05"/><path d="M3.9 8.7l-2.6-1.9c-.4-.7-.7-1.6-.7-2.5 0-.9.2-1.7.6-2.4l2.6 1.9c-.2.5-.4 1.1-.4 1.8 0 .6.1 1.2.3 1.7l.6.4z" fill="#EA4335"/></svg>
+        Sign in with Google
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- APP SHELL -->
+<div id="app-shell" class="app-shell" style="display:none;">
+  <header class="app-topbar">
+    <div class="brand">DR <span>Screening</span></div>
+    <div class="meta">AI &middot; EfficientNetV2B0 &middot; AUC 0.996</div>
+    <button onclick="showClinicianProfile()" class="avatar" aria-label="Profile" id="topbar-avatar">DR</button>
+  </header>
+
+  <main class="app-body">
+    <!-- DASHBOARD -->
+    <section id="view-dashboard">
+      <div class="page-title-row"><div class="page-title">Dashboard</div><div style="font-size:.72rem;color:var(--text-subtle);" id="dash-welcome">Welcome back</div></div>
+      <div class="stats" id="stats-row">
+        <div class="stat-card patients"><div class="label">Patients</div><div class="value">-</div></div>
+        <div class="stat-card screenings"><div class="label">Screenings</div><div class="value">-</div></div>
+        <div class="stat-card safe"><div class="label">No DR</div><div class="value">-</div></div>
+        <div class="stat-card risk"><div class="label">DR Present</div><div class="value">-</div></div>
+      </div>
+
+      <div class="card" style="margin-bottom:.7rem;">
+        <h2>Quick Actions</h2>
+        <div style="display:flex;gap:.45rem;flex-wrap:wrap;">
+          <a href="#" onclick="event.preventDefault();showScreen()" class="btn btn-primary btn-sm">New Screening</a>
+          <a href="#" onclick="event.preventDefault();showAddPatient()" class="btn btn-secondary btn-sm">Add Patient</a>
+          <a href="#" onclick="event.preventDefault();showHistory()" class="btn btn-secondary btn-sm">History</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Recent Screenings</h2>
+        <div id="recent-screenings"><div class="loading"><span class="spinner"></span> Loading recent screenings...</div></div>
+      </div>
+    </section>
+
+    <!-- PATIENTS -->
+    <section id="view-patients" style="display:none;">
+      <div class="page-title-row">
+        <div class="page-title">Patients</div>
+        <a href="#" onclick="event.preventDefault();showAddPatient()" class="btn btn-primary btn-sm">Add Patient</a>
+      </div>
+      <div class="card" style="padding:.55rem .6rem;">
+        <form onsubmit="searchPatientsEvent(event)" style="display:flex;gap:.4rem;margin-bottom:.5rem;">
+          <input id="search-input" placeholder="Search by name or ID..." style="flex:1;padding:.55rem .7rem;border-radius:10px;border:1.5px solid var(--border);font-size:.88rem;" />
+          <button type="submit" class="btn btn-secondary btn-sm">Search</button>
+        </form>
+        <div id="patients-list"><div class="loading"><span class="spinner"></span> Loading patients...</div></div>
+      </div>
+    </section>
+
+    <!-- ADD PATIENT -->
+    <section id="view-add-patient" style="display:none;">
+      <div class="page-title-row">
+        <div class="page-title">Add Patient</div>
+        <a href="#" onclick="event.preventDefault();showPatients()" class="btn btn-secondary btn-sm">Cancel</a>
+      </div>
+      <div class="card">
+        <div class="form-error" id="add-error"></div>
+        <form id="add-patient-form" onsubmit="submitNewPatient(event)">
+          <div class="form-group">
+            <label for="np-name">Patient Name *</label>
+            <input type="text" id="np-name" required maxlength="100" />
+            <div class="err" id="np-name-err"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="np-age">Age *</label>
+              <input type="number" id="np-age" min="0" max="130" required />
+              <div class="err" id="np-age-err"></div>
+            </div>
+            <div class="form-group">
+              <label for="np-gender">Gender *</label>
+              <select id="np-gender" required>
+                <option value="">Select...</option>
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+                <option value="Other">Other</option>
+              </select>
+              <div class="err" id="np-gender-err"></div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="np-phone">Phone *</label>
+            <input type="tel" id="np-phone" required maxlength="20" />
+            <div class="err" id="np-phone-err"></div>
+          </div>
+          <div class="form-group">
+            <label for="np-email">Email</label>
+            <input type="email" id="np-email" maxlength="100" />
+            <div class="err" id="np-email-err"></div>
+          </div>
+          <div class="form-group">
+            <label for="np-address">Address</label>
+            <textarea id="np-address" rows="2" maxlength="200"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block" id="np-submit">Create Patient</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- HISTORY -->
+    <section id="view-history" style="display:none;">
+      <div class="page-title-row"><div class="page-title">Screening History</div></div>
+      <div class="card" style="padding:.55rem .6rem;">
+        <form onsubmit="loadHistoryByIdSubmit(event)" style="display:flex;gap:.4rem;margin-bottom:.5rem;">
+          <input id="hist-pid" placeholder="Enter Patient ID (e.g. P-000004)" required style="flex:1;padding:.55rem .7rem;border-radius:10px;border:1.5px solid var(--border);font-size:.88rem;" />
+          <button type="submit" class="btn btn-secondary btn-sm">Load</button>
+        </form>
+        <div id="history-content"><div class="empty-state"><div class="ic">&#128269;</div><h3>Search patient history</h3><p>Enter a Patient ID above to view their screening history.</p></div></div>
+      </div>
+    </section>
+
+    <!-- SCREEN -->
+    <section id="view-screen" style="display:none;">
+      <div class="page-title-row"><div class="page-title">New Screening</div></div>
+
+      <div class="card" style="margin-bottom:.6rem;">
+        <div style="font-size:.85rem;font-weight:700;margin-bottom:.4rem;">Step 1 &mdash; Select Patient</div>
+        <form onsubmit="selectPatientForScreen(event)" style="display:flex;gap:.4rem;">
+          <input id="screen-pid" placeholder="Patient ID (e.g. P-000004)" required style="flex:1;padding:.55rem .7rem;border-radius:10px;border:1.5px solid var(--border);font-size:.88rem;" />
+          <button type="submit" class="btn btn-secondary btn-sm">Load</button>
+        </form>
+        <div id="screen-patient-info" style="margin-top:.4rem;font-size:.85rem;color:var(--text-secondary);"></div>
+      </div>
+
+      <div id="step-upload-card" class="card" style="display:none;margin-bottom:.6rem;">
+        <div style="font-size:.85rem;font-weight:700;margin-bottom:.4rem;">Step 2 &mdash; Upload Retinal Image</div>
+        <form onsubmit="runScreeningEvent(event)" style="display:flex;flex-direction:column;gap:.4rem;">
+          <label style="font-size:.74rem;color:var(--text-subtle);">Accepted: JPG, PNG</label>
+          <input type="file" id="img-file" name="file" accept="image/png,image/jpeg" required style="font-size:.85rem;" />
+          <div id="preview-box"></div>
+          <button type="submit" class="btn btn-primary">Analyze Image</button>
+        </form>
+      </div>
+
+      <div id="step-result-card" class="card" style="display:none;">
+        <div style="font-size:.85rem;font-weight:700;margin-bottom:.4rem;">AI Screening Result</div>
+        <div id="result-area"></div>
+        <div style="margin-top:.6rem;">
+          <label for="notes" style="font-size:.78rem;font-weight:600;color:var(--text-secondary);">Clinician Notes (optional)</label>
+          <textarea id="notes" rows="2" placeholder="Add clinical observations..." style="width:100%;border-radius:10px;border:1.5px solid var(--border);padding:.6rem .7rem;font-size:.85rem;background:var(--surface);margin-top:.2rem;margin-bottom:.4rem;font-family:inherit;"></textarea>
+          <button onclick="saveScreeningNotes()" class="btn btn-primary btn-sm">Save Screening Record</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- PATIENT PROFILE -->
+    <section id="view-profile" style="display:none;">
+      <div class="page-title-row">
+        <div class="page-title">Patient Profile</div>
+        <a href="#" onclick="event.preventDefault();showPatients()" class="btn btn-secondary btn-sm">Back</a>
+      </div>
+      <div id="profile-area"><div class="loading"><span class="spinner"></span> Loading patient...</div></div>
+    </section>
+
+    <!-- SCREENING DETAIL -->
+    <section id="view-screening" style="display:none;">
+      <div class="page-title-row">
+        <div class="page-title">Screening Detail</div>
+        <a href="#" onclick="event.preventDefault();navBack()" class="btn btn-secondary btn-sm">Back</a>
+      </div>
+      <div id="screening-area"><div class="loading"><span class="spinner"></span> Loading screening...</div></div>
+    </section>
+
+    <!-- CLINICIAN PROFILE -->
+    <section id="view-clinician-profile" style="display:none;">
+      <div class="page-title-row">
+        <div class="page-title">Clinician Profile</div>
+        <a href="#" onclick="event.preventDefault();navTo('dashboard')" class="btn btn-secondary btn-sm">Back</a>
+      </div>
+      <div id="clinician-area"></div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav" aria-label="Main Navigation">
+    <a href="#" onclick="event.preventDefault();navTo('dashboard')" id="nav-dashboard" class="active" aria-label="Dashboard">
+      <svg class="nav-icon" viewBox="0 0 24 24"><rect x="3" y="4" width="7" height="7" rx="1.5"/><rect x="14" y="4" width="7" height="7" rx="1.5"/><rect x="3" y="13" width="7" height="7" rx="1.5"/><rect x="14" y="13" width="7" height="7" rx="1.5"/></svg>
+      <span>Dashboard</span>
+    </a>
+    <a href="#" onclick="event.preventDefault();showPatients()" id="nav-patients" aria-label="Patients">
+      <svg class="nav-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span>Patients</span>
+    </a>
+    <a href="#" onclick="event.preventDefault();showScreen()" id="nav-screen" class="cta" aria-label="New Screening">
+      <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+      <span>Screen</span>
+    </a>
+    <a href="#" onclick="event.preventDefault();navTo('history')" id="nav-history" aria-label="History">
+      <svg class="nav-icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="8" y1="8" x2="8" y2="16"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="16" y1="8" x2="16" y2="16"/></svg>
+      <span>History</span>
+    </a>
+    <a href="#" onclick="event.preventDefault();showClinicianProfile()" id="nav-profile" aria-label="Profile">
+      <svg class="nav-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>Profile</span>
+    </a>
+  </nav>
+</div>
+
+<!-- MODAL -->
+<div id="modal-overlay" class="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal-card" id="modal-content"></div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div id="toast-container"></div>
+
+<script>
+"use strict";
+const BASE = "/api";
+const views = ["dashboard","patients","add-patient","history","screen","profile","screening","clinician-profile"];
+let currentScreening = null;
+let sessionUser = { name: "Dr. Demo", email: "doctor@clinic.org", role: "Clinician" };
+let returnToView = null;
+
+/* ===== UTILITIES ===== */
+function $(id) { return document.getElementById(id); }
+function esc(s) { const d = document.createElement("div"); d.textContent = s==null?"":String(s); return d.innerHTML; }
+function fmtDate(d, withTime) {
+  const dt = new Date(d);
+  if (isNaN(dt.getTime())) return "—";
+  // Always display in Asia/Kolkata (IST, UTC+05:30) regardless of browser timezone
+  const opts = { day: "numeric", month: "short", year: "numeric", timeZone: "Asia/Kolkata" };
+  const date = dt.toLocaleDateString("en-GB", opts);
+  if (!withTime) return date;
+  const t = dt.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", hour12: true, timeZone: "Asia/Kolkata" });
+  return date + " &middot; " + t;
+}
+function initials(name) { return (name||"?").split(/\s+/).filter(Boolean).map(p=>p[0]).slice(0,2).join("").toUpperCase(); }
+function genderLabel(g) { if (g==="M") return "Male"; if (g==="F") return "Female"; if (g==="Other") return "Other"; return g||"—"; }
+function toast(msg, type) {
+  const c = $("toast-container");
+  const el = document.createElement("div");
+  el.className = "toast " + (type||"");
+  el.textContent = msg;
+  c.appendChild(el);
+  setTimeout(()=>{ el.style.opacity = "0"; el.style.transition = "opacity .3s"; setTimeout(()=>el.remove(), 320); }, 2500);
+}
+function errMsg(msg) { return '<div class="form-error show">' + esc(msg) + '</div>'; }
+
+/* ===== IMAGE VIEWER MODAL ===== */
+function showImageModal(src, title) {
+  openModal(`
+    <h3 style="font-size:.95rem;">${esc(title)}</h3>
+    <div style="margin:.5rem 0;text-align:center;background:#000;border-radius:12px;overflow:hidden;max-height:70vh;display:flex;align-items:center;justify-content:center;">
+      <img src="${esc(src)}" alt="${esc(title)}" style="max-width:100%;max-height:65vh;object-fit:contain;display:block;" onerror="this.outerHTML='<div style=padding:2rem;color:#fff;text-align:center;>Image could not be loaded.</div>'" />
+    </div>
+    <p style="font-size:.72rem;color:var(--text-subtle);margin:.3rem 0 .5rem;text-align:center;">Tap outside or press Back to close</p>
+    <div class="modal-actions"><button class="btn btn-secondary btn-sm" onclick="closeModal()">Close</button></div>
+  `);
+}
+
+/* ===== MODAL ===== */
+function openModal(html) { $("modal-content").innerHTML = html; $("modal-overlay").classList.add("open"); }
+function closeModal() { $("modal-overlay").classList.remove("open"); }
+
+/* ===== AUTH ===== */
+// Firebase authentication state and handlers
+let authMode = "login"; // "login" | "signup"
+
+function setAuthMode(mode) {
+  authMode = mode;
+  const btnLogin = $("btn-mode-login");
+  const btnSignup = $("btn-mode-signup");
+  const signFields = $("auth-signup-fields");
+  const submitBtn = $("auth-submit-btn");
+  document.getElementById("auth-form").reset();
+  document.getElementById("auth-error").classList.remove("show");
+  document.getElementById("auth-error").textContent = "";
+  if (mode === "signup") {
+    btnSignup.style.background = "var(--primary)"; btnSignup.style.color = "#fff"; btnSignup.style.borderColor = "transparent";
+    btnLogin.style.background = "transparent"; btnLogin.style.color = "var(--text-secondary)"; btnLogin.style.borderColor = "var(--border)";
+    signFields.style.display = "block";
+    submitBtn.textContent = "Create Account";
+  } else {
+    btnLogin.style.background = "var(--primary)"; btnLogin.style.color = "#fff"; btnLogin.style.borderColor = "transparent";
+    btnSignup.style.background = "transparent"; btnSignup.style.color = "var(--text-secondary)"; btnSignup.style.borderColor = "var(--border)";
+    signFields.style.display = "none";
+    submitBtn.textContent = "Log In";
+  }
+}
+
+function showResetModal() {
+  openModal(`
+    <h3>Reset Password</h3>
+    <p style="font-size:.82rem;color:var(--text-secondary);margin-bottom:.8rem;">Enter your email and we will send a reset link.</p>
+    <form onsubmit="event.preventDefault();handleReset();closeModal();">
+      <div class="form-group"><label>Email</label><input id="reset-email" type="email" placeholder="doctor@clinic.org" required /></div>
+      <div class="modal-actions" style="margin-top:.5rem;">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="closeModal()">Cancel</button>
+        <button type="submit" class="btn btn-primary btn-sm">Send Link</button>
+      </div>
+    </form>`);
+}
+
+async function handleReset() {
+  const email = $("reset-email") ? $("reset-email").value.trim() : "";
+  if (!email) { toast("Please enter your email.", "err"); return; }
+  try {
+    await AuthAPI.resetPassword(email);
+    toast("Reset link sent. Check your inbox.", "ok");
+  } catch (e) {
+    toast(AuthAPI.friendlyError ? AuthAPI.friendlyError(e) : "Could not send reset email.", "err");
+  }
+}
+
+async function handleFirebaseAuth(e) {
+  e.preventDefault();
+  const errEl = $("auth-error");
+  errEl.classList.remove("show"); errEl.textContent = "";
+  const btn = $("auth-submit-btn"); btn.disabled = true; btn.textContent = "Processing...";
+  const email = $("auth-email").value.trim();
+  const pw = $("auth-password").value.trim();
+  if (!email || !pw) {
+    errEl.textContent = "Please enter both email and password."; errEl.classList.add("show");
+    btn.disabled = false; btn.textContent = authMode === "signup" ? "Create Account" : "Log In";
+    return;
+  }
+  try {
+    if (authMode === "signup") {
+      const name = $("auth-name") ? $("auth-name").value.trim() : "";
+      await AuthAPI.signUp(name, email, pw);
+    } else {
+      await AuthAPI.signIn(email, pw);
+    }
+    // Auth listener will handle UI transition; just toast.
+    toast(authMode === "signup" ? "Account created successfully." : "Welcome back.", "ok");
+  } catch (err) {
+    const msg = AuthAPI.friendlyError ? AuthAPI.friendlyError(err) : (err.message || "Something went wrong.");
+    errEl.textContent = msg; errEl.classList.add("show");
+  } finally {
+    btn.disabled = false; btn.textContent = authMode === "signup" ? "Create Account" : "Log In";
+  }
+}
+
+async function handleGoogleAuth() {
+  try {
+    await AuthAPI.signInWithGoogle();
+    toast("Welcome back.", "ok");
+  } catch (err) {
+    toast(AuthAPI.friendlyError ? AuthAPI.friendlyError(err) : (err.message || "Google sign-in failed."), "err");
+  }
+}
+
+// Auth-state listener that controls visibility of login vs app and syncs sessionUser
+let unsubscribeAuth = null;
+
+function handleFirebaseInit() {
+  // Initialize Firebase Auth listener and hide/show shell accordingly.
+  AuthAPI.init().then(({ auth }) => {
+    unsubscribeAuth = AuthAPI.onAuthChange((user) => {
+      const loginPage = $("login-page");
+      const appShell = $("app-shell");
+      if (user) {
+        sessionUser = user; // user is already userToSession-formatted
+        $("topbar-avatar").textContent = initials(sessionUser.name);
+        loginPage.style.display = "none";
+        appShell.style.display = "flex";
+        navTo("dashboard");
+        loadDashboardData();
+      } else {
+        sessionUser = null;
+        $("topbar-avatar").textContent = "DR";
+        loginPage.style.display = "flex";
+        appShell.style.display = "none";
+        // Reset auth form
+        setAuthMode("login");
+        document.getElementById("auth-form").reset();
+      }
+    });
+  }).catch((e) => {
+    console.error("Firebase init error:", e);
+    // Even if Firebase fails (e.g., missing config), keep existing behavior visible.
+    // Do not break the page.
+  });
+}
+
+function handleLogout() {
+  openModal('<h3>Log out?</h3><p>You will need to sign in again to access the application.</p><div class="modal-actions"><button class="btn btn-secondary btn-sm" onclick="closeModal()">Cancel</button><button class="btn btn-danger btn-sm" onclick="confirmLogout()">Log Out</button></div>');
+}
+function confirmLogout() {
+  AuthAPI.signOut().catch(() => {}); // Ignore errors on logout
+  closeModal();
+  sessionUser = null;
+  $("topbar-avatar").textContent = "DR";
+  $("app-shell").style.display = "none";
+  $("login-page").style.display = "flex";
+  setAuthMode("login");
+  document.getElementById("auth-form").reset();
+  toast("Logged out successfully", "ok");
+}
+function showForgot(e) { e.preventDefault(); showResetModal(); }
+
+/* ===== CLINICIAN PROFILE ===== */
+async function showClinicianProfile() {
+  navTo("clinician-profile");
+  $("clinician-area").innerHTML = '<div class="loading"><span class="spinner"></span> Loading profile...</div>';
+  try {
+    // Primary identity comes from Firebase auth (email/password or Google).
+    const fb = AuthAPI.currentUser ? AuthAPI.currentUser() : null;
+    const backend = await fetch(BASE+"/clinician").then(r=>{ if(!r.ok) throw new Error(); return r.json(); }).catch(()=>null);
+
+    // Merge: Firebase user provides name/email/photo; backend provides role.
+    const name = (fb && fb.name) ? fb.name : (backend && backend.name ? backend.name : (fb && fb.email ? fb.email.split("@")[0] : "Clinician"));
+    const email = (fb && fb.email) ? fb.email : (backend && backend.email ? backend.email : "");
+    const photo = (fb && fb.photoURL) ? fb.photoURL : null;
+    const role = (backend && backend.role) ? backend.role : "Clinician";
+
+    sessionUser = { name, email, role, photo };
+    $("topbar-avatar").textContent = photo ? "" : initials(name);
+    if (photo) {
+      const av = $("topbar-avatar");
+      av.innerHTML = `<img src="${esc(photo)}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+    } else {
+      $("topbar-avatar").textContent = initials(name);
+    }
+
+    // Build avatar HTML from Firebase photo or initials
+    const avatarHtml = photo
+      ? `<img src="${esc(photo)}" alt="" style="width:64px;height:64px;border-radius:50%;object-fit:cover;">`
+      : `<div class="profile-avatar">${esc(initials(name))}</div>`;
+
+    const html = `
+      <div class="card" style="margin-bottom:.7rem;">
+        <div class="profile-header">
+          ${avatarHtml}
+          <div>
+            <div class="profile-name">${esc(name)}</div>
+            <div class="profile-id">${esc(email)}</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.5rem;">
+          <button class="btn btn-secondary btn-sm" onclick="showEditProfileForm()">Edit Profile</button>
+          <button class="btn btn-secondary btn-sm" onclick="showChangePasswordForm()">Change Password</button>
+          <button class="btn btn-danger btn-sm" onclick="handleLogout()">Log Out</button>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:.7rem;">
+        <h2>Account</h2>
+        <div class="detail-grid">
+          <div class="detail-item"><div class="lbl">Clinician</div><div class="val">${esc(name)}</div></div>
+          <div class="detail-item"><div class="lbl">Email</div><div class="val">${esc(email)}</div></div>
+          <div class="detail-item"><div class="lbl">Role</div><div class="val">${esc(role)}</div></div>
+          <div class="detail-item"><div class="lbl">Session</div><div class="val" style="color:var(--safe);">Active</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <h2>App Information</h2>
+        <div class="detail-grid">
+          <div class="detail-item"><div class="lbl">Application</div><div class="val">DR Screening</div></div>
+          <div class="detail-item"><div class="lbl">Version</div><div class="val">v1.0.0</div></div>
+          <div class="detail-item"><div class="lbl">AI Model</div><div class="val">EfficientNetV2B0</div></div>
+          <div class="detail-item"><div class="lbl">Model AUC</div><div class="val">0.996</div></div>
+        </div>
+      </div>`;
+    $("clinician-area").innerHTML = html;
+  } catch(e) {
+    $("clinician-area").innerHTML = '<div class="empty-state"><h3>Could not load profile</h3><p>Please check your connection.</p><button class="btn btn-secondary btn-sm" onclick="showClinicianProfile()">Retry</button></div>';
+  }
+}
+
+function showEditProfileForm() {
+  const u = sessionUser || {};
+  openModal(`
+    <h3>Edit Profile</h3>
+    <p style="font-size:.78rem;color:var(--text-subtle);margin-bottom:.6rem;">Update your display name and email. Role cannot be changed.</p>
+    <div class="form-error" id="edit-profile-error"></div>
+    <form onsubmit="submitEditProfile(event)">
+      <div class="form-group"><label for="ep-name">Name</label><input id="ep-clin-name" value="${esc(u.name)}" required /></div>
+      <div class="form-group"><label for="ep-email">Email</label><input id="ep-clin-email" type="email" value="${esc(u.email)}" required /></div>
+      <div class="modal-actions" style="margin-top:.5rem;">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="closeModal()">Cancel</button>
+        <button type="submit" class="btn btn-primary btn-sm" id="ep-clin-submit">Save Changes</button>
+      </div>
+    </form>`);
+}
+
+async function submitEditProfile(e) {
+  e.preventDefault();
+  const errorEl = $("edit-profile-error");
+  if (errorEl) errorEl.classList.remove("show");
+  const name = $("ep-clin-name").value.trim();
+  const email = $("ep-clin-email").value.trim();
+  if (!name || name.length < 2) { if(errorEl){errorEl.textContent="Name must be at least 2 characters.";errorEl.classList.add("show");} return; }
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { if(errorEl){errorEl.textContent="Enter a valid email address.";errorEl.classList.add("show");} return; }
+  const btn = $("ep-clin-submit"); btn.disabled=true; btn.textContent="Saving...";
+  try {
+    const f = new FormData(); f.append("name", name); f.append("email", email);
+    const res = await fetch(BASE+"/clinician", {method:"PUT",body:f});
+    const data = await res.json();
+    if (data.ok) {
+      closeModal();
+      sessionUser.name = name; sessionUser.email = email;
+      $("topbar-avatar").textContent = initials(name);
+      toast("Profile updated successfully", "ok");
+      showClinicianProfile();
+    } else {
+      if(errorEl){errorEl.textContent=data.detail||"Could not update profile.";errorEl.classList.add("show");}
+    }
+  } catch(err) { if(errorEl){errorEl.textContent="Network error. Please try again.";errorEl.classList.add("show");}
+  } finally { const btn2=$("ep-clin-submit"); if(btn2){btn2.disabled=false;btn2.textContent="Save Changes";} }
+}
+
+function showChangePasswordForm() {
+  openModal(`
+    <h3>Change Password</h3>
+    <p style="font-size:.78rem;color:var(--text-subtle);margin-bottom:.6rem;">Enter your current password and choose a new one (minimum 8 characters).</p>
+    <div class="form-error" id="pw-error"></div>
+    <form onsubmit="submitChangePassword(event)">
+      <div class="form-group"><label>Current Password</label><input id="pw-current" type="password" required /></div>
+      <div class="form-group"><label>New Password</label><input id="pw-new" type="password" required minlength="8" /></div>
+      <div class="form-group"><label>Confirm New Password</label><input id="pw-confirm" type="password" required minlength="8" /></div>
+      <div class="modal-actions" style="margin-top:.5rem;">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="closeModal()">Cancel</button>
+        <button type="submit" class="btn btn-primary btn-sm" id="pw-submit">Change Password</button>
+      </div>
+    </form>`);
+}
+
+async function submitChangePassword(e) {
+  e.preventDefault();
+  const errorEl = $("pw-error");
+  if (errorEl) errorEl.classList.remove("show");
+  const current = $("pw-current").value;
+  const newPw = $("pw-new").value;
+  const confirm = $("pw-confirm").value;
+
+  if (!current) { if(errorEl){errorEl.textContent="Please enter your current password.";errorEl.classList.add("show");} return; }
+  if (newPw.length < 8) { if(errorEl){errorEl.textContent="New password must be at least 8 characters.";errorEl.classList.add("show");} return; }
+  if (newPw !== confirm) { if(errorEl){errorEl.textContent="New password and confirmation do not match.";errorEl.classList.add("show");} return; }
+  if (newPw === current) { if(errorEl){errorEl.textContent="New password must be different from current password.";errorEl.classList.add("show");} return; }
+
+  const btn = $("pw-submit"); btn.disabled=true; btn.textContent="Changing...";
+  try {
+    const f = new FormData(); f.append("current_password", current); f.append("new_password", newPw); f.append("confirm_password", confirm);
+    const res = await fetch(BASE+"/auth/change-password", {method:"POST",body:f});
+    const data = await res.json();
+    if (data.ok) {
+      closeModal();
+      toast("Password changed successfully", "ok");
+    } else {
+      if(errorEl){errorEl.textContent=data.detail||"Could not change password.";errorEl.classList.add("show");}
+    }
+  } catch(err) { if(errorEl){errorEl.textContent="Network error. Please try again.";errorEl.classList.add("show");}
+  } finally { const btn2=$("pw-submit"); if(btn2){btn2.disabled=false;btn2.textContent="Change Password";} }
+}
+
+/* ===== NAVIGATION ===== */
+function navTo(id) {
+  views.forEach(s => { const el = $("view-"+s); if (el) el.style.display = (id===s) ? "block" : "none"; });
+  // Bottom nav highlight (skip non-nav views)
+  ["dashboard","patients","screen","history","profile"].forEach(s => {
+    const navEl = $("nav-"+s);
+    if (navEl) navEl.classList.remove("active");
+  });
+  if (["dashboard","patients","screen","history"].includes(id)) {
+    const navEl = $("nav-"+id);
+    if (navEl) navEl.classList.add("active");
+  } else if (id === "clinician-profile") {
+    $("nav-profile")?.classList.add("active");
+  }
+  window.scrollTo(0, 0);
+}
+function navBack() {
+  if (returnToView && views.includes(returnToView)) { navTo(returnToView); returnToView = null; }
+  else navTo("dashboard");
+}
+
+/* ===== DASHBOARD ===== */
+async function loadDashboardData() {
+  try {
+    const res = await fetch(BASE+"/summary").then(r=>r.json());
+    // Calculate No DR / DR Present from screenings list
+    const screenings = await fetch(BASE+"/screenings?limit=200").then(r=>r.json());
+    const noDR = screenings.filter(s=>s.prediction < 0.5).length;
+    const drPresent = screenings.filter(s=>s.prediction >= 0.5).length;
+    const total = screenings.length;
+    const noDRFinal = total===0 ? 0 : (total === drPresent ? 0 : noDR);
+    const html = `
+      <div class="stat-card patients"><div class="label">Patients</div><div class="value">${res.patients||0}</div></div>
+      <div class="stat-card screenings"><div class="label">Screenings</div><div class="value">${total}</div></div>
+      <div class="stat-card safe"><div class="label">No DR</div><div class="value">${noDRFinal}</div></div>
+      <div class="stat-card risk"><div class="label">DR Present</div><div class="value">${drPresent}</div></div>`;
+    $("stats-row").innerHTML = html;
+  } catch (e) { console.error(e); }
+  loadRecentScreenings();
+}
+
+/* ===== RECENT SCREENINGS (REAL DATA) ===== */
+async function loadRecentScreenings() {
+  const c = $("recent-screenings");
+  try {
+    const screenings = await fetch(BASE+"/screenings").then(r=>r.json());
+    if (!screenings || screenings.length===0) {
+      c.innerHTML = '<div class="empty-state"><div class="ic">&#128300;</div><h3>No screenings yet</h3><p>Start your first retinal screening to see results.</p><button class="btn btn-primary btn-sm" onclick="showScreen()">New Screening</button></div>';
+      return;
+    }
+    c.innerHTML = screenings.slice(0, 5).map(s => {
+      const isRisk = s.prediction >= 0.5;
+      return `<a class="screening-card" href="#" onclick="event.preventDefault();openScreeningDetail('${esc(s.screening_id)}')">
+        <div class="sc-icon ${isRisk?'risk':'ok'}">${isRisk?"&#9888;":"&#10003;"}</div>
+        <div class="sc-meta">
+          <h4>${esc(s.patient_id)}</h4>
+          <p>${esc(s.screening_id)} &middot; ${fmtDate(s.date, true)}</p>
+          <span class="sc-badge ${isRisk?'risk':'ok'}">${isRisk?"DR Present":"No DR"} &middot; ${(s.confidence*100).toFixed(1)}%</span>
+        </div>
+      </a>`;
+    }).join("");
+  } catch (e) {
+    c.innerHTML = '<div class="empty-state"><h3>Unable to load screenings</h3><p>Please try again.</p></div>';
+  }
+}
+
+/* ===== PATIENTS LIST ===== */
+async function loadPatientsList(query) {
+  const c = $("patients-list");
+  c.innerHTML = '<div class="loading"><span class="spinner"></span> Loading patients...</div>';
+  try {
+    const url = query ? BASE+"/patients?q="+encodeURIComponent(query) : BASE+"/patients";
+    const patients = await fetch(url).then(r=>r.json());
+    if (!patients || patients.length===0) {
+      c.innerHTML = '<div class="empty-state"><div class="ic">&#128101;</div><h3>No patients found</h3><p>Click "Add Patient" to create a new record.</p></div>';
+      return;
+    }
+    // Enrich with screening counts
+    const enriched = await Promise.all(patients.map(async p => {
+      try {
+        const detail = await fetch(BASE+"/patients/"+encodeURIComponent(p.patient_id)).then(r=>r.json());
+        return { ...p, screenings: detail.screenings || [] };
+      } catch (e) { return { ...p, screenings: [] }; }
+    }));
+    c.innerHTML = enriched.map(p => {
+      const sc = p.screenings.length;
+      const last = sc > 0 ? p.screenings[0] : null;
+      const lastLabel = last ? (last.prediction >= 0.5 ? "DR Present" : "No DR") : null;
+      const lastDate = last ? fmtDate(last.date, false) : null;
+      const meta = sc === 0 ? "No screenings yet" : `${sc} screening${sc>1?"s":""} &middot; Last: <strong>${lastLabel}</strong> (${fmtDate(last.date, false)})`;
+      return `<div class="list-card" onclick="openProfile('${esc(p.patient_id)}')">
+        <div class="lc-avatar">${esc(initials(p.name))}</div>
+        <div class="lc-meta">
+          <h4>${esc(p.name)}</h4>
+          <p>${esc(p.patient_id)} &middot; ${p.age} yrs &middot; ${esc(genderLabel(p.gender))}</p>
+          <p style="margin-top:.15rem;">${meta}</p>
+        </div>
+      </div>`;
+    }).join("");
+  } catch (e) {
+    c.innerHTML = '<div class="empty-state"><h3>Unable to load patients</h3><p>Please try again.</p></div>';
+  }
+}
+function searchPatientsEvent(e) { e.preventDefault(); loadPatientsList($("search-input").value.trim()); }
+function showPatients() { navTo("patients"); loadPatientsList(""); }
+
+/* ===== ADD PATIENT ===== */
+function showAddPatient() {
+  $("add-patient-form").reset();
+  $("add-error").classList.remove("show");
+  ["np-name-err","np-age-err","np-gender-err","np-phone-err","np-email-err"].forEach(id=>{ const el=$(id); if(el) el.textContent=""; });
+  navTo("add-patient");
+}
+function validateNewPatient() {
+  const name = $("np-name").value.trim();
+  const age = parseInt($("np-age").value, 10);
+  const gender = $("np-gender").value;
+  const phone = $("np-phone").value.trim();
+  const email = $("np-email").value.trim();
+  let ok = true;
+  function setErr(id, msg) { const el=$(id); if(el){ el.textContent = msg; } if(msg) ok = false; }
+  if (!name) setErr("np-name-err", "Name is required");
+  else setErr("np-name-err", "");
+  if (isNaN(age) || age <= 0 || age > 130) setErr("np-age-err", "Enter a valid age (1-130)");
+  else setErr("np-age-err", "");
+  if (!gender) setErr("np-gender-err", "Select gender");
+  else setErr("np-gender-err", "");
+  if (!phone || phone.replace(/\D/g,"").length < 7) setErr("np-phone-err", "Enter a valid phone number");
+  else setErr("np-phone-err", "");
+  if (email) {
+    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRe.test(email)) setErr("np-email-err", "Enter a valid email");
+    else setErr("np-email-err", "");
+  } else setErr("np-email-err", "");
+  return ok;
+}
+async function submitNewPatient(e) {
+  e.preventDefault();
+  $("add-error").classList.remove("show");
+  if (!validateNewPatient()) return;
+  const f = new FormData();
+  f.append("name", $("np-name").value.trim());
+  f.append("age", $("np-age").value);
+  f.append("gender", $("np-gender").value);
+  f.append("phone", $("np-phone").value.trim());
+  f.append("email", $("np-email").value.trim());
+  f.append("address", $("np-address").value.trim());
+  const btn = $("np-submit");
+  btn.disabled = true; btn.textContent = "Creating...";
+  try {
+    const res = await fetch(BASE+"/patients", { method: "POST", body: f });
+    const data = await res.json();
+    if (data.ok) {
+      toast("Patient created successfully", "ok");
+      // Backend returns {"ok":True,"patient":{"patient_id":...,"name":...}}
+      const newPid = data.patient ? data.patient.patient_id : "";
+      showPatients();
+      // Auto-open the new patient profile
+      if (newPid) setTimeout(() => openProfile(newPid), 200);
+    } else {
+      $("add-error").textContent = data.detail || "Could not create patient. Please try again.";
+      $("add-error").classList.add("show");
+    }
+  } catch (err) {
+    $("add-error").textContent = "Network error. Please try again.";
+    $("add-error").classList.add("show");
+  } finally {
+    btn.disabled = false; btn.textContent = "Create Patient";
+  }
+}
+
+/* ===== PATIENT PROFILE ===== */
+async function openProfile(pid) {
+  navTo("profile");
+  $("profile-area").innerHTML = '<div class="loading"><span class="spinner"></span> Loading patient...</div>';
+  try {
+    const data = await fetch(BASE+"/patients/"+encodeURIComponent(pid)).then(r=>{ if(!r.ok) throw new Error("not found"); return r.json(); });
+    const p = data.patient;
+    const screenings = data.screenings || [];
+    const isEmpty = screenings.length === 0;
+    const lastDate = isEmpty ? "No screenings yet" : fmtDate(screenings[0].date, false);
+    const lastResult = isEmpty ? "—" : (screenings[0].prediction >= 0.5 ? "DR Present" : "No DR");
+    const html = `
+      <div class="card" style="margin-bottom:.7rem;">
+        <div class="profile-header">
+          <div class="profile-avatar">${esc(initials(p.name))}</div>
+          <div>
+            <div class="profile-name">${esc(p.name)}</div>
+            <div class="profile-id">${esc(p.patient_id)} &middot; ${p.age} yrs &middot; ${esc(genderLabel(p.gender))}</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.5rem;">
+          <button class="btn btn-secondary btn-sm" onclick="openEditPatient('${esc(p.patient_id)}')">Edit Patient</button>
+          <button class="btn btn-danger btn-sm" onclick="confirmDeletePatient('${esc(p.patient_id)}','${esc(p.name)}')">Delete Patient</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:.7rem;">
+        <h2>Patient Information</h2>
+        <div class="detail-grid">
+          <div class="detail-item"><div class="lbl">Patient ID</div><div class="val">${esc(p.patient_id)}</div></div>
+          <div class="detail-item"><div class="lbl">Age</div><div class="val">${p.age} years</div></div>
+          <div class="detail-item"><div class="lbl">Gender</div><div class="val">${esc(genderLabel(p.gender))}</div></div>
+          <div class="detail-item"><div class="lbl">Phone</div><div class="val">${esc(p.phone||"—")}</div></div>
+          <div class="detail-item"><div class="lbl">Email</div><div class="val">${esc(p.email||"—")}</div></div>
+          <div class="detail-item"><div class="lbl">Address</div><div class="val">${esc(p.address||"—")}</div></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:.7rem;">
+        <h2>Screening Summary</h2>
+        <div class="detail-grid">
+          <div class="detail-item"><div class="lbl">Total Screenings</div><div class="val">${screenings.length}</div></div>
+          <div class="detail-item"><div class="lbl">Latest Result</div><div class="val">${esc(lastResult)}</div></div>
+          <div class="detail-item"><div class="lbl">Last Screened</div><div class="val">${esc(lastDate)}</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Screening History</h2>
+        ${screenings.length === 0
+          ? '<div class="empty-state"><div class="ic">&#128300;</div><h3>No screenings yet</h3><p>Start a new screening for this patient.</p><button class="btn btn-primary btn-sm" onclick="startScreeningFor(\''+esc(p.patient_id)+'\')">New Screening</button></div>'
+          : screenings.map(s => {
+              const isRisk = s.prediction >= 0.5;
+              return `<div class="list-card" onclick="openScreeningDetail('${esc(s.screening_id)}', 'profile')">
+                <div class="lc-avatar" style="background:${isRisk?'linear-gradient(135deg,#c73e3e,#e74c3c)':'linear-gradient(135deg,#1b8e4b,#27ae60)'};">${isRisk?"&#9888;":"&#10003;"}</div>
+                <div class="lc-meta">
+                  <h4>${esc(s.screening_id)}</h4>
+                  <p>${fmtDate(s.date, true)}</p>
+                  <span class="sc-badge ${isRisk?'risk':'ok'}">${isRisk?"DR Present":"No DR"} &middot; ${(s.confidence*100).toFixed(1)}%</span>
+                </div>
+              </div>`;
+            }).join("")
+        }
+      </div>`;
+    $("profile-area").innerHTML = html;
+  } catch (e) {
+    $("profile-area").innerHTML = '<div class="empty-state"><h3>Patient not found</h3><p>The record may have been deleted.</p><button class="btn btn-secondary btn-sm" onclick="showPatients()">Back to Patients</button></div>';
+  }
+}
+
+/* ===== EDIT PATIENT ===== */
+async function openEditPatient(pid) {
+  try {
+    const data = await fetch(BASE+"/patients/"+encodeURIComponent(pid)).then(r=>r.json());
+    const p = data.patient;
+    const html = `
+      <h3>Edit Patient</h3>
+      <p style="font-size:.78rem;color:var(--text-subtle);margin-bottom:.8rem;">${esc(p.patient_id)} &mdash; Patient ID cannot be edited.</p>
+      <div class="form-error" id="edit-error"></div>
+      <form id="edit-form" onsubmit="submitEditPatient(event, '${esc(p.patient_id)}')">
+        <div class="form-group"><label>Name *</label><input id="ep-name" value="${esc(p.name)}" required /></div>
+        <div class="form-row">
+          <div class="form-group"><label>Age *</label><input id="ep-age" type="number" min="0" max="130" value="${p.age}" required /></div>
+          <div class="form-group"><label>Gender *</label><select id="ep-gender" required>
+            <option value="M" ${p.gender==="M"?"selected":""}>Male</option>
+            <option value="F" ${p.gender==="F"?"selected":""}>Female</option>
+            <option value="Other" ${p.gender==="Other"?"selected":""}>Other</option>
+          </select></div>
+        </div>
+        <div class="form-group"><label>Phone *</label><input id="ep-phone" value="${esc(p.phone||'')}" required /></div>
+        <div class="form-group"><label>Email</label><input id="ep-email" type="email" value="${esc(p.email||'')}" /></div>
+        <div class="form-group"><label>Address</label><textarea id="ep-address" rows="2">${esc(p.address||'')}</textarea></div>
+        <div class="modal-actions" style="margin-top:.5rem;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary btn-sm">Save Changes</button>
+        </div>
+      </form>`;
+    openModal(html);
+  } catch (e) {
+    toast("Could not load patient", "err");
+  }
+}
+async function submitEditPatient(e, pid) {
+  e.preventDefault();
+  const name = $("ep-name").value.trim();
+  const age = $("ep-age").value;
+  const gender = $("ep-gender").value;
+  const phone = $("ep-phone").value.trim();
+  const email = $("ep-email").value.trim();
+  const address = $("ep-address").value.trim();
+  if (!name || !age || !gender || !phone) {
+    $("edit-error").textContent = "Please fill all required fields.";
+    $("edit-error").classList.add("show");
+    return;
+  }
+  const f = new FormData();
+  f.append("name", name); f.append("age", age); f.append("gender", gender);
+  f.append("phone", phone); f.append("email", email); f.append("address", address);
+  try {
+    const res = await fetch(BASE+"/patients/"+encodeURIComponent(pid), { method: "PUT", body: f });
+    const data = await res.json();
+    if (data.ok) {
+      closeModal();
+      toast("Patient information updated successfully", "ok");
+      openProfile(pid);
+    } else {
+      $("edit-error").textContent = data.detail || "Could not update patient.";
+      $("edit-error").classList.add("show");
+    }
+  } catch (err) {
+    $("edit-error").textContent = "Network error. Please try again.";
+    $("edit-error").classList.add("show");
+  }
+}
+
+/* ===== DELETE PATIENT ===== */
+function confirmDeletePatient(pid, name) {
+  openModal(`
+    <h3>Delete patient?</h3>
+    <p>This will permanently delete <strong>${esc(name)}</strong> and all associated screening records. This action cannot be undone.</p>
+    <div class="modal-actions">
+      <button class="btn btn-secondary btn-sm" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-danger btn-sm" onclick="doDeletePatient('${esc(pid)}')">Delete Patient</button>
+    </div>`);
+}
+async function doDeletePatient(pid) {
+  try {
+    const res = await fetch(BASE+"/patients/"+encodeURIComponent(pid), { method: "DELETE" });
+    const data = await res.json();
+    if (data.ok) {
+      closeModal();
+      toast("Patient deleted successfully", "ok");
+      showPatients();
+    } else {
+      toast(data.detail || "Could not delete patient", "err");
+    }
+  } catch (e) { toast("Network error", "err"); }
+}
+
+/* ===== SCREENING WORKFLOW ===== */
+function showScreen() {
+  $("step-upload-card").style.display = "none";
+  $("step-result-card").style.display = "none";
+  $("screen-patient-info").innerHTML = "";
+  $("img-file").value = "";
+  $("preview-box").innerHTML = "";
+  $("notes").value = "";
+  $("screen-pid").value = "";
+  currentScreening = null;
+  navTo("screen");
+}
+function startScreeningFor(pid) {
+  showScreen();
+  $("screen-pid").value = pid;
+  selectPatientForScreen({ preventDefault: () => {} });
+}
+function selectPatientForScreen(e) {
+  if (e && e.preventDefault) e.preventDefault();
+  const pid = $("screen-pid").value.trim();
+  if (!pid) return;
+  $("screen-patient-info").innerHTML = '<span class="spinner"></span> Loading...';
+  fetch(BASE+"/patients/"+encodeURIComponent(pid)).then(r=>{ if(!r.ok) throw new Error("not found"); return r.json(); }).then(data => {
+    const p = data.patient;
+    $("screen-patient-info").innerHTML = `<strong>${esc(p.name)}</strong> (${esc(p.patient_id)}) &middot; ${p.age} yrs &middot; ${esc(genderLabel(p.gender))} &middot; ${data.screenings.length} prior screening(s)`;
+    $("step-upload-card").style.display = "block";
+    $("step-result-card").style.display = "none";
+    $("step-upload-card").scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }).catch(() => {
+    $("screen-patient-info").innerHTML = '<span style="color:var(--danger);">Patient not found. Please check the ID and try again.</span>';
+    $("step-upload-card").style.display = "none";
+  });
+}
+
+document.addEventListener("change", e => {
+  if (e.target && e.target.id === "img-file") {
+    const f = e.target.files[0];
+    if (!f) return;
+    const url = URL.createObjectURL(f);
+    $("preview-box").innerHTML = `<img src="${url}" style="max-width:240px;border-radius:10px;border:2px solid var(--border);margin-top:.4rem;" alt="Preview" />`;
+  }
+});
+
+async function runScreeningEvent(e) {
+  e.preventDefault();
+  const pid = $("screen-pid").value.trim();
+  const file = $("img-file").files[0];
+  if (!file) { toast("Please select an image", "err"); return; }
+  const resultArea = $("result-area");
+  resultArea.innerHTML = '<div class="loading"><span class="spinner"></span> Analyzing retinal image with EfficientNetV2B0...</div>';
+  $("step-result-card").style.display = "block";
+  const f = new FormData();
+  f.append("patient_id", pid);
+  f.append("file", file);
+  try {
+    const res = await fetch(BASE+"/screenings/predict", { method: "POST", body: f });
+    const data = await res.json();
+    if (!data.ok) {
+      resultArea.innerHTML = '<div style="color:var(--danger);font-size:.85rem;">Screening failed. Please try again with a different image.</div>';
+      toast("Screening failed", "err");
+      return;
+    }
+    currentScreening = data;
+    const isRisk = data.prediction === 1;
+    const sid = data.screening_id;
+    const imgUrl = `${BASE}/screenings/${encodeURIComponent(sid)}/image`;
+    const heatUrl = `${BASE}/screenings/${encodeURIComponent(sid)}/heatmap`;
+    resultArea.innerHTML = `
+      <div class="result-banner ${isRisk?'risk':'ok'}">
+        <h3>${isRisk ? 'DR Present - Refer to Ophthalmologist' : 'No DR Detected'}</h3>
+        <div class="prob-large">${(data.probability*100).toFixed(2)}%</div>
+        <div class="label-small">Confidence: ${(data.confidence*100).toFixed(1)}% &middot; Threshold: 0.50</div>
+        <p style="font-size:.82rem;color:${isRisk?'#a52a2a':'#1b6b3a'};margin-top:.3rem;">${esc(data.interpretation||"")}</p>
+      </div>
+      <div style="margin-top:.6rem;">
+        <h4 style="font-size:.82rem;font-weight:700;color:var(--text-secondary);margin-bottom:.3rem;">GAP-CAM Visualization</h4>
+        <p style="font-size:.76rem;color:var(--text-subtle);margin-bottom:.4rem;">Highlighted regions contributed to the AI prediction. Tap an image to enlarge.</p>
+        <div class="gapcam-grid">
+          <div>
+            <img src="${imgUrl}" alt="Original Retinal Image" style="cursor:pointer;" onclick="showImageModal('${imgUrl}','Original Retinal Image')" onerror="this.parentNode.innerHTML='<div class=empty-state>Image unavailable</div>'" />
+            <div class="gapcam-label">Original Retinal Image</div>
+          </div>
+          <div>
+            <img src="${heatUrl}" alt="GAP-CAM Heatmap" style="cursor:pointer;" onclick="showImageModal('${heatUrl}','GAP-CAM Heatmap')" onerror="this.parentNode.innerHTML='<div class=empty-state>Heatmap unavailable</div>'" />
+            <div class="gapcam-label">GAP-CAM Heatmap</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:.7rem;padding:.6rem;background:var(--surface-2);border-radius:10px;font-size:.76rem;color:var(--text-secondary);line-height:1.45;">
+        <strong>Disclaimer:</strong> This AI output is intended as a screening/support tool and is not a substitute for evaluation by a qualified medical professional.
+      </div>`;
+    toast("Screening complete", "ok");
+  } catch (err) {
+    resultArea.innerHTML = '<div style="color:var(--danger);font-size:.85rem;">Could not reach the server. Please try again.</div>';
+    toast("Network error", "err");
+  }
+}
+async function saveScreeningNotes() {
+  if (!currentScreening) { toast("No screening to save", "err"); return; }
+  const notes = $("notes").value.trim();
+  try {
+    const f = new FormData();
+    f.append("notes", notes);
+    const res = await fetch(BASE+"/screenings/"+encodeURIComponent(currentScreening.screening_id)+"/notes", { method: "PUT", body: f });
+    const data = await res.json();
+    if (data.ok) {
+      currentScreening.clinician_notes = notes;
+      toast("Screening record saved", "ok");
+      loadDashboardData();
+    } else {
+      toast("Could not save notes", "err");
+    }
+  } catch (e) { toast("Network error", "err"); }
+}
+
+/* ===== HISTORY ===== */
+function showHistory() { navTo("history"); }
+function loadHistoryByIdSubmit(e) {
+  e.preventDefault();
+  const pid = $("hist-pid").value.trim();
+  loadHistoryById(pid);
+}
+async function loadHistoryById(pid) {
+  const c = $("history-content");
+  c.innerHTML = '<div class="loading"><span class="spinner"></span> Loading history...</div>';
+  try {
+    const data = await fetch(BASE+"/patients/"+encodeURIComponent(pid)).then(r=>{ if(!r.ok) throw new Error("not found"); return r.json(); });
+    const p = data.patient;
+    const screenings = data.screenings || [];
+    const html = `
+      <h3 style="font-size:.95rem;font-weight:700;margin-bottom:.3rem;">${esc(p.name)} &mdash; ${esc(p.patient_id)}</h3>
+      <p style="font-size:.76rem;color:var(--text-subtle);margin-bottom:.6rem;">${p.age} yrs &middot; ${esc(genderLabel(p.gender))} &middot; ${screenings.length} screening(s)</p>
+      ${screenings.length === 0
+        ? '<div class="empty-state"><div class="ic">&#128300;</div><h3>No screenings yet</h3><p>Start a new screening for this patient.</p><button class="btn btn-primary btn-sm" onclick="startScreeningFor(\''+esc(pid)+'\')">New Screening</button></div>'
+        : screenings.map(s => {
+            const isRisk = s.prediction >= 0.5;
+            return `<div class="list-card" onclick="openScreeningDetail('${esc(s.screening_id)}', 'history')">
+              <div class="lc-avatar" style="background:${isRisk?'linear-gradient(135deg,#c73e3e,#e74c3c)':'linear-gradient(135deg,#1b8e4b,#27ae60)'};">${isRisk?"&#9888;":"&#10003;"}</div>
+              <div class="lc-meta">
+                <h4>${esc(s.screening_id)}</h4>
+                <p>${fmtDate(s.date, true)}</p>
+                <span class="sc-badge ${isRisk?'risk':'ok'}">${isRisk?"DR Present":"No DR"} &middot; ${(s.confidence*100).toFixed(1)}%</span>
+              </div>
+            </div>`;
+          }).join("")
+      }`;
+    c.innerHTML = html;
+  } catch (e) {
+    c.innerHTML = '<div class="empty-state"><h3>Patient not found</h3><p>Please check the Patient ID and try again.</p></div>';
+  }
+}
+
+/* ===== SCREENING DETAIL ===== */
+async function openScreeningDetail(sid, retView) {
+  returnToView = retView || null;
+  navTo("screening");
+  $("screening-area").innerHTML = '<div class="loading"><span class="spinner"></span> Loading screening...</div>';
+  try {
+    const s = await fetch(BASE+"/screenings/"+encodeURIComponent(sid)).then(r=>{ if(!r.ok) throw new Error("not found"); return r.json(); });
+    const isRisk = s.prediction >= 0.5;
+    const imgPath = s.image_path ? "/" + s.image_path.replace(/\\/g,"/") : "";
+    const heatPath = s.gapcam_path ? "/" + s.gapcam_path.replace(/\\/g,"/") : "";
+    const html = `
+      <div class="card" style="margin-bottom:.6rem;">
+        <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.5rem;">
+          <div style="width:42px;height:42px;border-radius:12px;background:${isRisk?'var(--danger-soft)':'var(--safe-soft)'};color:${isRisk?'var(--danger)':'var(--safe)'};display:flex;align-items:center;justify-content:center;font-size:1.2rem;">${isRisk?"&#9888;":"&#10003;"}</div>
+          <div>
+            <div style="font-size:1rem;font-weight:800;letter-spacing:-0.3px;">${isRisk?"DR Present":"No DR Detected"}</div>
+            <div style="font-size:.76rem;color:var(--text-subtle);">${esc(s.screening_id)} &middot; ${fmtDate(s.date, true)}</div>
+          </div>
+        </div>
+        <div class="detail-grid" style="grid-template-columns:1fr 1fr;">
+          <div class="detail-item"><div class="lbl">Result</div><div class="val lg" style="color:${isRisk?'var(--danger)':'var(--safe)'};">${isRisk?"DR Present":"No DR"}</div></div>
+          <div class="detail-item"><div class="lbl">Confidence</div><div class="val lg">${(s.confidence*100).toFixed(1)}%</div></div>
+          <div class="detail-item"><div class="lbl">Probability</div><div class="val">${(s.prediction*100).toFixed(2)}%</div></div>
+          <div class="detail-item"><div class="lbl">Threshold</div><div class="val">${(s.threshold||0.5).toFixed(2)}</div></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:.6rem;">
+        <h2>Patient</h2>
+        <div class="detail-grid" style="grid-template-columns:1fr 1fr;">
+          <div class="detail-item"><div class="lbl">Name</div><div class="val">${esc(s.patient_name||"—")}</div></div>
+          <div class="detail-item"><div class="lbl">Patient ID</div><div class="val">${esc(s.patient_id)}</div></div>
+        </div>
+        <button class="btn btn-secondary btn-sm" style="margin-top:.5rem;" onclick="openProfile('${esc(s.patient_id)}')">View Full Patient Profile</button>
+      </div>
+
+      <div class="card" style="margin-bottom:.6rem;">
+        <h2>AI Model</h2>
+        <div class="detail-grid">
+          <div class="detail-item"><div class="lbl">Model</div><div class="val">EfficientNetV2B0</div></div>
+          <div class="detail-item"><div class="lbl">Quantization</div><div class="val">INT8</div></div>
+          <div class="detail-item"><div class="lbl">Test AUC</div><div class="val">0.996</div></div>
+          <div class="detail-item"><div class="lbl">Version</div><div class="val">v1.0.0</div></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:.6rem;">
+        <h2>Retinal Image — Original</h2>
+        <div style="text-align:center;">
+          <img class="detail-img" src="/api/screenings/${encodeURIComponent(s.screening_id)}/image" alt="Original retinal image" style="cursor:pointer;max-height:320px;object-fit:contain;" onclick="showImageModal('/api/screenings/${encodeURIComponent(s.screening_id)}/image','Original Retinal Image — ${esc(s.screening_id)}')" onerror="this.outerHTML='<div class=empty-state><div class=ic>&#9888;</div><h3>Image unavailable</h3><p>The original retinal image could not be loaded for this screening.</p></div>'" />
+          <div style="font-size:.72rem;color:var(--text-subtle);margin-top:.25rem;">Click to enlarge &middot; ${esc(s.screening_id)}</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:.6rem;">
+        <h2>AI Explainability (GAP-CAM)</h2>
+        <p style="font-size:.76rem;color:var(--text-subtle);margin-bottom:.4rem;">Highlighted regions contributed to the AI prediction.</p>
+        <div style="text-align:center;">
+          <img class="detail-img" src="/api/screenings/${encodeURIComponent(s.screening_id)}/heatmap" alt="GAP-CAM heatmap" style="cursor:pointer;max-height:320px;object-fit:contain;" onclick="showImageModal('/api/screenings/${encodeURIComponent(s.screening_id)}/heatmap','GAP-CAM Heatmap — ${esc(s.screening_id)}')" onerror="this.outerHTML='<div class=empty-state><div class=ic>&#9888;</div><h3>GAP-CAM unavailable</h3><p>The AI explainability heatmap could not be generated for this screening.</p></div>'" />
+          <div style="font-size:.72rem;color:var(--text-subtle);margin-top:.25rem;">Click to enlarge &middot; Generated by EfficientNetV2B0 GAP-CAM pipeline</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:.6rem;">
+        <h2>Clinician Notes</h2>
+        <div style="padding:.6rem;background:var(--surface-2);border-radius:10px;min-height:50px;font-size:.85rem;color:var(--text-secondary);border:1px solid var(--border);">${s.clinician_notes ? esc(s.clinician_notes) : '<em style="color:var(--text-subtle);">No notes recorded.</em>'}</div>
+      </div>
+
+      <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem;">
+        <a class="btn btn-primary btn-sm" href="/api/reports/${encodeURIComponent(s.screening_id)}" target="_blank" rel="noopener">View Full Report</a>
+        <button class="btn btn-secondary btn-sm" onclick="openProfile('${esc(s.patient_id)}')">Back to Patient</button>
+        <button class="btn btn-secondary btn-sm" onclick="navBack()">Back to History</button>
+      </div>`;
+    $("screening-area").innerHTML = html;
+  } catch (e) {
+    $("screening-area").innerHTML = '<div class="empty-state"><h3>Screening not found</h3><p>The record may have been deleted.</p><button class="btn btn-secondary btn-sm" onclick="navTo(\'dashboard\')">Back to Dashboard</button></div>';
+  }
+}
+
+/* ===== INIT ===== */
+window.addEventListener("load", () => {
+  handleFirebaseInit();
+});
+</script>
+</body>
+</html>

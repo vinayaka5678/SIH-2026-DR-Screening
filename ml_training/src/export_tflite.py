@@ -25,27 +25,69 @@ from tensorflow import keras
 
 
 def load_representative_dataset(data_dir: Path, num_samples: int = 100):
-    """
-    Load representative dataset for INT8 quantization calibration.
-
-    Returns a generator function that yields input samples.
-    """
-
     train_data = np.load(data_dir / 'train.npz')
     images = train_data['images']
-
-    # Select random subset for calibration
     indices = np.random.choice(len(images), size=min(num_samples, len(images)), replace=False)
     calibration_images = images[indices]
-
-    print(f"✅ Loaded {len(calibration_images)} images for quantization calibration")
+    print(f"Loaded {len(calibration_images)} images for quantization calibration")
 
     def representative_dataset_gen():
         for img in calibration_images:
-            # TFLite converter expects batch dimension
             yield [np.expand_dims(img, axis=0).astype(np.float32)]
-
     return representative_dataset_gen
+
+
+def export_dual_output_tflite(
+    model_path: Path,
+    output_path: Path,
+    representative_dataset_gen,
+    quantize: bool = True
+) -> int:
+    """
+    Export a dual-output model (classification + feature_maps as float32)
+    for GAP-CAM inference. Feature maps are kept at float32 so Android
+    can apply dense weights for heatmap calculation.
+    """
+    model = keras.models.load_model(str(model_path))
+
+    # For GAP-CAM: we need the feature_maps output, not just classification
+    # Create a model that outputs both classification and feature_maps
+    inference_model = keras.Model(
+        inputs=model.input,
+        outputs=[
+            model.get_layer('classification').output,
+            model.get_layer('feature_maps').output,
+        ],
+        name='inference_dual_output'
+    )
+
+    converter = tf.lite.TFLiteConverter.from_keras_model(inference_model)
+
+    if quantize:
+        print(f"\nApplying INT8 quantization on classification output (feature_maps kept float32)...")
+        # Note: When specifying dual outputs, TFLite quantization applies
+        # differently. We use default optimization but keep feature map output as float32.
+        converter.optimizations = [tf.lite.Optimize.DEFAULT]
+        converter.representative_dataset = representative_dataset_gen
+        converter.target_spec.supported_ops = [
+            tf.lite.OpsSet.TFLITE_BUILTINS,
+            tf.lite.OpsSet.SELECT_TF_OPS,
+        ]
+        # Classification output quantized to uint8; feature maps stay float32
+        converter.inference_input_type = tf.uint8
+        converter.inference_output_type = tf.float32  # Mixed outputs handled by interpreter
+    else:
+        print(f"\nConverting dual-output model to TFLite (no quantization)...")
+
+    tflite_model = converter.convert()
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(output_path, 'wb') as f:
+        f.write(tflite_model)
+
+    file_size = output_path.stat().st_size
+    print(f"Dual-output TFLite model saved to: {output_path}")
+    print(f"File size: {file_size / (1024**2):.2f} MB")
+    return file_size
 
 
 def extract_dense_weights(model: keras.Model) -> Tuple[np.ndarray, np.ndarray]:
@@ -73,7 +115,7 @@ def extract_dense_weights(model: keras.Model) -> Tuple[np.ndarray, np.ndarray]:
 
     weights, bias = dense_layer.get_weights()
 
-    print(f"✅ Extracted dense layer weights:")
+    print(f"OK Extracted dense layer weights:")
     print(f"   Weights shape: {weights.shape}")
     print(f"   Bias shape: {bias.shape}")
 
@@ -105,7 +147,7 @@ def convert_to_tflite(
     converter = tf.lite.TFLiteConverter.from_keras_model(inference_model)
 
     if quantize:
-        print(f"\n🔄 Applying INT8 quantization...")
+        print(f"\nPROCESSING: Applying INT8 quantization...")
 
         # Enable INT8 quantization
         converter.optimizations = [tf.lite.Optimize.DEFAULT]
@@ -119,7 +161,7 @@ def convert_to_tflite(
         print(f"   Input type: uint8")
         print(f"   Output type: uint8")
     else:
-        print(f"\n🔄 Converting to TFLite (no quantization)...")
+        print(f"\nPROCESSING: Converting to TFLite (no quantization)...")
 
     tflite_model = converter.convert()
 
@@ -129,7 +171,7 @@ def convert_to_tflite(
         f.write(tflite_model)
 
     file_size = output_path.stat().st_size
-    print(f"✅ TFLite model saved to: {output_path}")
+    print(f"OK TFLite model saved to: {output_path}")
     print(f"   File size: {file_size / (1024**2):.2f} MB ({file_size / 1024:.1f} KB)")
 
     return file_size
@@ -161,7 +203,7 @@ def validate_tflite_model(
     input_details = interpreter.get_input_details()
     output_details = interpreter.get_output_details()
 
-    print(f"\n📊 TFLite Model Details:")
+    print(f"\nSTATS: TFLite Model Details:")
     print(f"   Input shape: {input_details[0]['shape']}")
     print(f"   Input dtype: {input_details[0]['dtype']}")
     print(f"   Output shape: {output_details[0]['shape']}")
@@ -170,7 +212,7 @@ def validate_tflite_model(
     # Check if model uses quantization
     is_quantized = input_details[0]['dtype'] == np.uint8
 
-    print(f"\n🔄 Running inference on {len(X_test_sample)} test samples...")
+    print(f"\nPROCESSING: Running inference on {len(X_test_sample)} test samples...")
 
     predictions = []
     for img in X_test_sample:
@@ -206,11 +248,11 @@ def validate_tflite_model(
     try:
         from sklearn.metrics import roc_auc_score
         auc = roc_auc_score(y_test_sample, predictions)
-        print(f"✅ TFLite validation (n={len(X_test_sample)}):")
+        print(f"OK TFLite validation (n={len(X_test_sample)}):")
         print(f"   Accuracy: {accuracy:.4f}")
         print(f"   AUC-ROC: {auc:.4f}")
     except:
-        print(f"✅ TFLite validation (n={len(X_test_sample)}):")
+        print(f"OK TFLite validation (n={len(X_test_sample)}):")
         print(f"   Accuracy: {accuracy:.4f}")
 
 
@@ -240,7 +282,7 @@ def export_gapcam_weights(
     with open(output_path, 'w') as f:
         json.dump(gapcam_data, f, indent=2)
 
-    print(f"✅ GAP-CAM weights exported to: {output_path}")
+    print(f"OK GAP-CAM weights exported to: {output_path}")
     print(f"   Number of channels: {len(weights_list)}")
     print(f"   File size: {output_path.stat().st_size / 1024:.1f} KB")
 
@@ -271,7 +313,7 @@ def create_deployment_bundle(
     with open(metadata_path, 'w') as f:
         json.dump(deployment_info, f, indent=2)
 
-    print(f"✅ Deployment metadata saved to: {metadata_path}")
+    print(f"OK Deployment metadata saved to: {metadata_path}")
 
 
 def main():
@@ -320,13 +362,19 @@ def main():
     print(f"Quantization: {'Enabled' if args.quantize else 'Disabled'}")
     print()
 
-    # Load trained model
-    print(f"🔄 Loading trained model...")
-    model = keras.models.load_model(args.model_path)
-    print(f"✅ Model loaded successfully")
+    # Load dual-output trained model
+    # The dual-output model is saved as dual_output_model.keras
+    dual_model_path = args.model_path
+    if not dual_model_path.exists():
+        dual_model_path = args.output_dir.parent / 'models' / 'dual_output_model.keras'
+
+    print(f"Loading dual-output model from: {dual_model_path}")
+    model = keras.models.load_model(str(dual_model_path))
+    print(f"Model loaded successfully")
+    print(f"Output names: {list(model.output_names)}")
 
     # Extract dense layer weights for GAP-CAM
-    print(f"\n🔄 Extracting dense layer weights for GAP-CAM...")
+    print(f"\nExtracting dense layer weights for GAP-CAM...")
     weights, bias = extract_dense_weights(model)
 
     # Load representative dataset for quantization
@@ -335,7 +383,7 @@ def main():
     else:
         representative_dataset_gen = None
 
-    # Convert to TFLite
+    # Export classification-only TFLite (INT8 quantized, smallest footprint)
     tflite_path = args.output_dir / 'dr_model_int8.tflite'
     file_size = convert_to_tflite(
         model=model,
