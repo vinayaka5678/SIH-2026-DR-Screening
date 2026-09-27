@@ -6,7 +6,10 @@ from datetime import datetime, timezone
 Base = declarative_base()
 
 # Use absolute path — computed at import time relative to this file's location
-_DB_PATH = "C:/Users/vinay/SIH-2026-DR-Screening/app/database/dr_screening.db"
+import pathlib
+_DB_DIR = pathlib.Path(__file__).resolve().parent.parent / "database"
+_DB_DIR.mkdir(parents=True, exist_ok=True)
+_DB_PATH = _DB_DIR / "dr_screening.db"
 ENGINE = create_engine(f"sqlite:///{_DB_PATH}", connect_args={"check_same_thread": False})
 
 
@@ -47,6 +50,19 @@ class Screening(Base):
     gapcam_path = Column(String(200))
     clinician_notes = Column(Text)
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+
+    # Phase 8B: Clinician Review Fields (SEPARATE from AI result)
+    clinician_id = Column(String(20))
+    clinician_assessment = Column(String(50))  # NO_DR, DR_PRESENT, UNGRADABLE, OTHER, UNCERTAIN
+    clinician_confidence = Column(Float)  # Clinician's own confidence (0-1)
+    override_reason = Column(Text)
+    clinician_reviewed_at = Column(String(50))  # ISO timestamp
+    review_status = Column(String(20), default="PENDING")  # PENDING, IN_PROGRESS, COMPLETED
+
+    # Phase 7: Clinician Action/Follow-up (SEPARATE from both AI and assessment)
+    clinical_action = Column(String(50))  # REVIEW_REQUIRED, FOLLOW_UP, REFERRAL, NO_ACTION_DOCUMENTED
+    clinical_action_notes = Column(Text)  # Clinician's notes for the final action
+
     patient = relationship("Patient", back_populates="screenings")
 
 
