@@ -1,1 +1,10 @@
-fastapi uvicorn sqlalchemy pillow numpy tensorflow python-multipart
+fastapi
+uvicorn
+sqlalchemy
+pillow
+numpy
+tensorflow
+python-multipart
+opencv-python
+scipy
+firebase-admin>=6.0.0

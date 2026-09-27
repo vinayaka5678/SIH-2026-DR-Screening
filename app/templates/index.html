@@ -208,13 +208,13 @@ body { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif; b
     <div class="logo" aria-label="Logo">
       <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="10"/><path d="M8 16l6-6 6 6"/></svg>
     </div>
-    <h1>DR Screening</h1>
-    <p class="subtitle">AI-Powered Diabetic Retinopathy Screening</p>
+    <h1 data-i18n="DR Screening">DR Screening</h1>
+    <p class="subtitle" data-i18n="AI-Powered Diabetic Retinopathy Screening">AI-Powered Diabetic Retinopathy Screening</p>
 
     <!-- Auth toggle -->
     <div style="display:flex;gap:.5rem;justify-content:center;margin-bottom:1rem;font-size:.8rem;">
-      <button onclick="setAuthMode('login')" id="btn-mode-login" class="btn btn-sm" style="border-radius:20px;padding:.35rem .7rem;background:var(--primary);color:#fff;border:none;font-weight:600;">Login</button>
-      <button onclick="setAuthMode('signup')" id="btn-mode-signup" class="btn btn-sm" style="border-radius:20px;padding:.35rem .7rem;background:transparent;color:var(--text-secondary);border:1px solid var(--border);font-weight:600;">Sign Up</button>
+      <button onclick="setAuthMode('login')" id="btn-mode-login" class="btn btn-sm" style="border-radius:20px;padding:.35rem .7rem;background:var(--primary);color:#fff;border:none;font-weight:600;" data-i18n="Login">Login</button>
+      <button onclick="setAuthMode('signup')" id="btn-mode-signup" class="btn btn-sm" style="border-radius:20px;padding:.35rem .7rem;background:transparent;color:var(--text-secondary);border:1px solid var(--border);font-weight:600;" data-i18n="Sign Up">Sign Up</button>
     </div>
 
     <form id="auth-form" onsubmit="handleFirebaseAuth(event)">
@@ -223,33 +223,33 @@ body { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif; b
       <!-- Sign-up fields -->
       <div id="auth-signup-fields" style="display:none;">
         <div class="form-group">
-          <label for="auth-name">Clinician Name</label>
-          <input type="text" id="auth-name" name="name" placeholder="Dr. A. Patel" autocomplete="name" />
+          <label for="auth-name" data-i18n="Clinician Name">Clinician Name</label>
+          <input type="text" id="auth-name" name="name" placeholder="Dr. A. Patel" autocomplete="name" data-i18n="Dr. A. Patel" aria-label="Dr. A. Patel" />
         </div>
       </div>
 
       <!-- Shared fields -->
       <div class="form-group">
-        <label for="auth-email">Email</label>
-        <input type="email" id="auth-email" name="email" placeholder="doctor@clinic.org" required autocomplete="email" />
+        <label for="auth-email" data-i18n="Email">Email</label>
+        <input type="email" id="auth-email" name="email" placeholder="doctor@clinic.org" required autocomplete="email" data-i18n="doctor@clinic.org" aria-label="doctor@clinic.org" />
       </div>
       <div class="form-group">
-        <label for="auth-password">Password</label>
-        <input type="password" id="auth-password" name="password" placeholder="Enter your password" required autocomplete="current-password" />
+        <label for="auth-password" data-i18n="Password">Password</label>
+        <input type="password" id="auth-password" name="password" placeholder="Enter your password" required autocomplete="current-password" data-i18n="Enter your password" aria-label="Enter your password" />
       </div>
 
       <div class="row" style="margin-bottom:.6rem;">
-        <label class="remember" style="font-size:.82rem;color:var(--text-subtle);"><input type="checkbox" id="remember" /> Remember me</label>
-        <a href="#" onclick="event.preventDefault();showResetModal();" class="forgot" style="font-size:.82rem;color:var(--primary);">Forgot password?</a>
+        <label class="remember" style="font-size:.82rem;color:var(--text-subtle);"><input type="checkbox" id="remember" /> <span data-i18n="Remember me">Remember me</span></label>
+        <a href="#" onclick="event.preventDefault();showResetModal();" class="forgot" style="font-size:.82rem;color:var(--primary);" data-i18n="Forgot password?">Forgot password?</a>
       </div>
 
-      <button type="submit" id="auth-submit-btn" class="btn btn-primary btn-block" style="margin-top:.2rem;">Log In</button>
+      <button type="submit" id="auth-submit-btn" class="btn btn-primary btn-block" style="margin-top:.2rem;" data-i18n="Log In">Log In</button>
     </form>
 
     <div style="margin-top:.8rem;">
       <button onclick="handleGoogleAuth()" class="btn btn-secondary btn-block" style="border-radius:10px;display:flex;align-items:center;justify-content:center;gap:.4rem;padding:.7rem 1rem;font-size:.85rem;font-weight:600;">
         <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M9 3.48c1.4 0 2.58.48 3.5 1.3l2.3-2.3C13.1 1.2 11.2.7 9 .7 5.9.7 3.2 2.5 2.2 5l2.6 1.9c.4-1.1 1.3-1.9 2.5-1.9z" fill="#4285F4"/><path d="M17.6 9.3c-.2-.6-.7-1.1-1.3-1.4V6.5h-.4l-2.7 2h-.7l-.3-.3-.4-.9c.6-.6 1-1.4 1-2.3 0-.3-.1-.6-.2-.9.1-.2.2-.5.2-.8 0-.3-.1-.6-.2-.9-.3-.8-.9-1.4-1.6-1.6V2c.6 0 1.2.1 1.8.2L14.5 4.2c.4-.2.9-.3 1.4-.3 1.1 0 2 .6 2.6 1.4-.7.2-1.3.6-1.9 1.2z" fill="#34A853"/><path d="M9 14.3c.7 0 1.3-.1 1.9-.4l2.4 2.4c-.7.4-1.6.6-2.5.6-2.2 0-4.1-1.3-4.9-3.1l-2.6 1.9c1.1 1.6 2.9 2.7 5.1 2.7 2.4 0 4.5-1.1 5.5-2.7l-2.6-1.9c-.7.5-1.6.7-2.5.7-1.3 0-2.4-.6-3.1-1.4l-.7-.4-2.6 1.9c.3.8.7 1.5 1.2 2.1l.6.5z" fill="#FBBC05"/><path d="M3.9 8.7l-2.6-1.9c-.4-.7-.7-1.6-.7-2.5 0-.9.2-1.7.6-2.4l2.6 1.9c-.2.5-.4 1.1-.4 1.8 0 .6.1 1.2.3 1.7l.6.4z" fill="#EA4335"/></svg>
-        Sign in with Google
+        <span data-i18n="Sign in with Google">Sign in with Google</span>
       </button>
     </div>
   </div>
@@ -259,143 +259,154 @@ body { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif; b
 <div id="app-shell" class="app-shell" style="display:none;">
   <header class="app-topbar">
     <div class="brand">DR <span>Screening</span></div>
-    <div class="meta">AI &middot; EfficientNetV2B0 &middot; AUC 0.996</div>
+    <div class="lang-switcher" style="display:flex; gap:0.2rem; margin-right:auto; margin-left:0.4rem;">
+      <button id="lang-toggle-en" onclick="setLanguage('en')" style="font-size:0.6rem; padding:0.2rem 0.3rem; border-radius:4px; border:1px solid var(--border); background:var(--surface);">EN</button>
+      <button id="lang-toggle-kn" onclick="setLanguage('kn')" style="font-size:0.6rem; padding:0.2rem 0.3rem; border-radius:4px; border:1px solid var(--border); background:var(--surface);">ಕನ್ನಡ</button>
+      <style>
+        .lang-switcher button.active {
+          background-color: var(--primary) !important;
+          color: #fff;
+          border-color: var(--primary);
+        }
+      </style>
+    </div>
+    <div class="meta" data-i18n="AI · EfficientNetV2B0 · AUC 0.996">AI · EfficientNetV2B0 · AUC 0.996</div>
     <button onclick="showClinicianProfile()" class="avatar" aria-label="Profile" id="topbar-avatar">DR</button>
   </header>
 
   <main class="app-body">
     <!-- DASHBOARD -->
     <section id="view-dashboard">
-      <div class="page-title-row"><div class="page-title">Dashboard</div><div style="font-size:.72rem;color:var(--text-subtle);" id="dash-welcome">Welcome back</div></div>
+      <div class="page-title-row"><div class="page-title" data-i18n="Dashboard">Dashboard</div><div style="font-size:.72rem;color:var(--text-subtle);" id="dash-welcome" data-i18n="Welcome back">Welcome back</div></div>
       <div class="stats" id="stats-row">
-        <div class="stat-card patients"><div class="label">Patients</div><div class="value">-</div></div>
-        <div class="stat-card screenings"><div class="label">Screenings</div><div class="value">-</div></div>
-        <div class="stat-card safe"><div class="label">No DR</div><div class="value">-</div></div>
-        <div class="stat-card risk"><div class="label">DR Present</div><div class="value">-</div></div>
+        <div class="stat-card patients"><div class="label" data-i18n="Patients">Patients</div><div class="value">-</div></div>
+        <div class="stat-card screenings"><div class="label" data-i18n="Screenings">Screenings</div><div class="value">-</div></div>
+        <div class="stat-card safe"><div class="label" data-i18n="No DR">No DR</div><div class="value">-</div></div>
+        <div class="stat-card risk"><div class="label" data-i18n="DR Present">DR Present</div><div class="value">-</div></div>
       </div>
 
       <div class="card" style="margin-bottom:.7rem;">
-        <h2>Quick Actions</h2>
+        <h2 data-i18n="Quick Actions">Quick Actions</h2>
         <div style="display:flex;gap:.45rem;flex-wrap:wrap;">
-          <a href="#" onclick="event.preventDefault();showScreen()" class="btn btn-primary btn-sm">New Screening</a>
-          <a href="#" onclick="event.preventDefault();showAddPatient()" class="btn btn-secondary btn-sm">Add Patient</a>
-          <a href="#" onclick="event.preventDefault();showHistory()" class="btn btn-secondary btn-sm">History</a>
+          <a href="#" onclick="event.preventDefault();showScreen()" class="btn btn-primary btn-sm" data-i18n="New Screening">New Screening</a>
+          <a href="#" onclick="event.preventDefault();showAddPatient()" class="btn btn-secondary btn-sm" data-i18n="Add Patient">Add Patient</a>
+          <a href="#" onclick="event.preventDefault();showHistory()" class="btn btn-secondary btn-sm" data-i18n="History">History</a>
         </div>
       </div>
 
       <div class="card">
-        <h2>Recent Screenings</h2>
-        <div id="recent-screenings"><div class="loading"><span class="spinner"></span> Loading recent screenings...</div></div>
+        <h2 data-i18n="Recent Screenings">Recent Screenings</h2>
+        <div id="recent-screenings"><div class="loading"><span class="spinner"></span> <span data-i18n="Loading recent screenings...">Loading recent screenings...</span></div></div>
       </div>
     </section>
 
     <!-- PATIENTS -->
     <section id="view-patients" style="display:none;">
       <div class="page-title-row">
-        <div class="page-title">Patients</div>
-        <a href="#" onclick="event.preventDefault();showAddPatient()" class="btn btn-primary btn-sm">Add Patient</a>
+        <div class="page-title" data-i18n="Patients">Patients</div>
+        <a href="#" onclick="event.preventDefault();showAddPatient()" class="btn btn-primary btn-sm" data-i18n="Add Patient">Add Patient</a>
       </div>
       <div class="card" style="padding:.55rem .6rem;">
         <form onsubmit="searchPatientsEvent(event)" style="display:flex;gap:.4rem;margin-bottom:.5rem;">
-          <input id="search-input" placeholder="Search by name or ID..." style="flex:1;padding:.55rem .7rem;border-radius:10px;border:1.5px solid var(--border);font-size:.88rem;" />
-          <button type="submit" class="btn btn-secondary btn-sm">Search</button>
+          <input id="search-input" placeholder="Search by name or ID..." style="flex:1;padding:.55rem .7rem;border-radius:10px;border:1.5px solid var(--border);font-size:.88rem;" data-i18n="Search by name or ID..." aria-label="Search by name or ID..." />
+          <button type="submit" class="btn btn-secondary btn-sm" data-i18n="Search">Search</button>
         </form>
-        <div id="patients-list"><div class="loading"><span class="spinner"></span> Loading patients...</div></div>
+        <div id="patients-list"><div class="loading"><span class="spinner"></span> <span data-i18n="Loading patients...">Loading patients...</span></div></div>
       </div>
     </section>
 
     <!-- ADD PATIENT -->
     <section id="view-add-patient" style="display:none;">
       <div class="page-title-row">
-        <div class="page-title">Add Patient</div>
-        <a href="#" onclick="event.preventDefault();showPatients()" class="btn btn-secondary btn-sm">Cancel</a>
+        <div class="page-title" data-i18n="Add Patient">Add Patient</div>
+        <a href="#" onclick="event.preventDefault();showPatients()" class="btn btn-secondary btn-sm" data-i18n="Cancel">Cancel</a>
       </div>
       <div class="card">
         <div class="form-error" id="add-error"></div>
         <form id="add-patient-form" onsubmit="submitNewPatient(event)">
           <div class="form-group">
-            <label for="np-name">Patient Name *</label>
+            <label for="np-name" data-i18n="Patient Name *">Patient Name *</label>
             <input type="text" id="np-name" required maxlength="100" />
             <div class="err" id="np-name-err"></div>
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label for="np-age">Age *</label>
+              <label for="np-age" data-i18n="Age *">Age *</label>
               <input type="number" id="np-age" min="0" max="130" required />
               <div class="err" id="np-age-err"></div>
             </div>
             <div class="form-group">
-              <label for="np-gender">Gender *</label>
+              <label for="np-gender" data-i18n="Gender *">Gender *</label>
               <select id="np-gender" required>
-                <option value="">Select...</option>
-                <option value="M">Male</option>
-                <option value="F">Female</option>
-                <option value="Other">Other</option>
+                <option value="" data-i18n="Select...">Select...</option>
+                <option value="M" data-i18n="Male">Male</option>
+                <option value="F" data-i18n="Female">Female</option>
+                <option value="Other" data-i18n="Other">Other</option>
               </select>
               <div class="err" id="np-gender-err"></div>
             </div>
           </div>
           <div class="form-group">
-            <label for="np-phone">Phone *</label>
+            <label for="np-phone" data-i18n="Phone *">Phone *</label>
             <input type="tel" id="np-phone" required maxlength="20" />
             <div class="err" id="np-phone-err"></div>
           </div>
           <div class="form-group">
-            <label for="np-email">Email</label>
+            <label for="np-email" data-i18n="Email">Email</label>
             <input type="email" id="np-email" maxlength="100" />
             <div class="err" id="np-email-err"></div>
           </div>
           <div class="form-group">
-            <label for="np-address">Address</label>
+            <label for="np-address" data-i18n="Address">Address</label>
             <textarea id="np-address" rows="2" maxlength="200"></textarea>
           </div>
-          <button type="submit" class="btn btn-primary btn-block" id="np-submit">Create Patient</button>
+          <button type="submit" class="btn btn-primary btn-block" id="np-submit" data-i18n="Create Patient">Create Patient</button>
         </form>
       </div>
     </section>
 
     <!-- HISTORY -->
     <section id="view-history" style="display:none;">
-      <div class="page-title-row"><div class="page-title">Screening History</div></div>
+      <div class="page-title-row"><div class="page-title" data-i18n="Screening History">Screening History</div></div>
       <div class="card" style="padding:.55rem .6rem;">
         <form onsubmit="loadHistoryByIdSubmit(event)" style="display:flex;gap:.4rem;margin-bottom:.5rem;">
-          <input id="hist-pid" placeholder="Enter Patient ID (e.g. P-000004)" required style="flex:1;padding:.55rem .7rem;border-radius:10px;border:1.5px solid var(--border);font-size:.88rem;" />
-          <button type="submit" class="btn btn-secondary btn-sm">Load</button>
+          <input id="hist-pid" placeholder="Enter Patient ID (e.g. P-000004)" required style="flex:1;padding:.55rem .7rem;border-radius:10px;border:1.5px solid var(--border);font-size:.88rem;" data-i18n="Enter Patient ID (e.g. P-000004)" aria-label="Enter Patient ID (e.g. P-000004)" />
+          <button type="submit" class="btn btn-secondary btn-sm" data-i18n="Load">Load</button>
         </form>
-        <div id="history-content"><div class="empty-state"><div class="ic">&#128269;</div><h3>Search patient history</h3><p>Enter a Patient ID above to view their screening history.</p></div></div>
+        <div id="history-content"><div class="empty-state"><div class="ic">&#128269;</div><h3 data-i18n="Search patient history">Search patient history</h3><p data-i18n="Enter a Patient ID above to view their screening history.">Enter a Patient ID above to view their screening history.</p></div></div>
       </div>
     </section>
 
     <!-- SCREEN -->
     <section id="view-screen" style="display:none;">
-      <div class="page-title-row"><div class="page-title">New Screening</div></div>
+      <div class="page-title-row"><div class="page-title" data-i18n="New Screening">New Screening</div></div>
 
       <div class="card" style="margin-bottom:.6rem;">
-        <div style="font-size:.85rem;font-weight:700;margin-bottom:.4rem;">Step 1 &mdash; Select Patient</div>
+        <div style="font-size:.85rem;font-weight:700;margin-bottom:.4rem;" data-i18n="Step 1 — Select Patient">Step 1 — Select Patient</div>
         <form onsubmit="selectPatientForScreen(event)" style="display:flex;gap:.4rem;">
-          <input id="screen-pid" placeholder="Patient ID (e.g. P-000004)" required style="flex:1;padding:.55rem .7rem;border-radius:10px;border:1.5px solid var(--border);font-size:.88rem;" />
-          <button type="submit" class="btn btn-secondary btn-sm">Load</button>
+          <input id="screen-pid" placeholder="Patient ID (e.g. P-000004)" required style="flex:1;padding:.55rem .7rem;border-radius:10px;border:1.5px solid var(--border);font-size:.88rem;" data-i18n="Patient ID (e.g. P-000004)" aria-label="Patient ID (e.g. P-000004)" />
+          <button type="submit" class="btn btn-secondary btn-sm" data-i18n="Load">Load</button>
         </form>
         <div id="screen-patient-info" style="margin-top:.4rem;font-size:.85rem;color:var(--text-secondary);"></div>
       </div>
 
       <div id="step-upload-card" class="card" style="display:none;margin-bottom:.6rem;">
-        <div style="font-size:.85rem;font-weight:700;margin-bottom:.4rem;">Step 2 &mdash; Upload Retinal Image</div>
+        <div style="font-size:.85rem;font-weight:700;margin-bottom:.4rem;" data-i18n="Step 2 — Upload Retinal Image">Step 2 — Upload Retinal Image</div>
         <form onsubmit="runScreeningEvent(event)" style="display:flex;flex-direction:column;gap:.4rem;">
-          <label style="font-size:.74rem;color:var(--text-subtle);">Accepted: JPG, PNG</label>
+          <label style="font-size:.74rem;color:var(--text-subtle);" data-i18n="Accepted: JPG, PNG">Accepted: JPG, PNG</label>
           <input type="file" id="img-file" name="file" accept="image/png,image/jpeg" required style="font-size:.85rem;" />
           <div id="preview-box"></div>
-          <button type="submit" class="btn btn-primary">Analyze Image</button>
+          <button type="submit" class="btn btn-primary" data-i18n="Analyze Image">Analyze Image</button>
         </form>
       </div>
 
       <div id="step-result-card" class="card" style="display:none;">
-        <div style="font-size:.85rem;font-weight:700;margin-bottom:.4rem;">AI Screening Result</div>
+        <div style="font-size:.85rem;font-weight:700;margin-bottom:.4rem;" data-i18n="AI Screening Result">AI Screening Result</div>
         <div id="result-area"></div>
         <div style="margin-top:.6rem;">
-          <label for="notes" style="font-size:.78rem;font-weight:600;color:var(--text-secondary);">Clinician Notes (optional)</label>
-          <textarea id="notes" rows="2" placeholder="Add clinical observations..." style="width:100%;border-radius:10px;border:1.5px solid var(--border);padding:.6rem .7rem;font-size:.85rem;background:var(--surface);margin-top:.2rem;margin-bottom:.4rem;font-family:inherit;"></textarea>
-          <button onclick="saveScreeningNotes()" class="btn btn-primary btn-sm">Save Screening Record</button>
+          <label for="notes" style="font-size:.78rem;font-weight:600;color:var(--text-secondary);" data-i18n="Clinician Notes (optional)">Clinician Notes (optional)</label>
+          <textarea id="notes" rows="2" placeholder="Add clinical observations..." style="width:100%;border-radius:10px;border:1.5px solid var(--border);padding:.6rem .7rem;font-size:.85rem;background:var(--surface);margin-top:.2rem;margin-bottom:.4rem;font-family:inherit;" data-i18n="Add clinical observations..." aria-label="Add clinical observations..."></textarea>
+          <button onclick="saveScreeningNotes()" class="btn btn-primary btn-sm" data-i18n="Save Screening Record">Save Screening Record</button>
         </div>
       </div>
     </section>
@@ -403,26 +414,34 @@ body { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif; b
     <!-- PATIENT PROFILE -->
     <section id="view-profile" style="display:none;">
       <div class="page-title-row">
-        <div class="page-title">Patient Profile</div>
-        <a href="#" onclick="event.preventDefault();showPatients()" class="btn btn-secondary btn-sm">Back</a>
+        <div class="page-title" data-i18n="Patient Profile">Patient Profile</div>
+        <a href="#" onclick="event.preventDefault();showPatients()" class="btn btn-secondary btn-sm" data-i18n="Back">Back</a>
       </div>
-      <div id="profile-area"><div class="loading"><span class="spinner"></span> Loading patient...</div></div>
+      <div id="profile-area"><div class="loading"><span class="spinner"></span> <span data-i18n="Loading patient...">Loading patient...</span></div></div>
+    </section>
+
+    <!-- PENDING REVIEWS -->
+    <section id="view-pending-reviews" style="display:none;">
+      <div class="page-title-row"><div class="page-title" data-i18n="Pending Reviews">Pending Reviews</div></div>
+      <div class="card" style="padding:.55rem .6rem;">
+        <div id="pending-reviews-list"><div class="loading"><span class="spinner"></span> <span data-i18n="Loading pending screenings...">Loading pending screenings...</span></div></div>
+      </div>
     </section>
 
     <!-- SCREENING DETAIL -->
     <section id="view-screening" style="display:none;">
       <div class="page-title-row">
-        <div class="page-title">Screening Detail</div>
-        <a href="#" onclick="event.preventDefault();navBack()" class="btn btn-secondary btn-sm">Back</a>
+        <div class="page-title" data-i18n="Screening Detail">Screening Detail</div>
+        <a href="#" onclick="event.preventDefault();navBack()" class="btn btn-secondary btn-sm" data-i18n="Back">Back</a>
       </div>
-      <div id="screening-area"><div class="loading"><span class="spinner"></span> Loading screening...</div></div>
+      <div id="screening-area"><div class="loading"><span class="spinner"></span> <span data-i18n="Loading screening...">Loading screening...</span></div></div>
     </section>
 
     <!-- CLINICIAN PROFILE -->
     <section id="view-clinician-profile" style="display:none;">
       <div class="page-title-row">
-        <div class="page-title">Clinician Profile</div>
-        <a href="#" onclick="event.preventDefault();navTo('dashboard')" class="btn btn-secondary btn-sm">Back</a>
+        <div class="page-title" data-i18n="Clinician Profile">Clinician Profile</div>
+        <a href="#" onclick="event.preventDefault();navTo('dashboard')" class="btn btn-secondary btn-sm" data-i18n="Back">Back</a>
       </div>
       <div id="clinician-area"></div>
     </section>
@@ -431,23 +450,23 @@ body { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif; b
   <nav class="bottom-nav" aria-label="Main Navigation">
     <a href="#" onclick="event.preventDefault();navTo('dashboard')" id="nav-dashboard" class="active" aria-label="Dashboard">
       <svg class="nav-icon" viewBox="0 0 24 24"><rect x="3" y="4" width="7" height="7" rx="1.5"/><rect x="14" y="4" width="7" height="7" rx="1.5"/><rect x="3" y="13" width="7" height="7" rx="1.5"/><rect x="14" y="13" width="7" height="7" rx="1.5"/></svg>
-      <span>Dashboard</span>
+      <span data-i18n="Dashboard">Dashboard</span>
     </a>
     <a href="#" onclick="event.preventDefault();showPatients()" id="nav-patients" aria-label="Patients">
       <svg class="nav-icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      <span>Patients</span>
+      <span data-i18n="Patients">Patients</span>
     </a>
     <a href="#" onclick="event.preventDefault();showScreen()" id="nav-screen" class="cta" aria-label="New Screening">
       <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-      <span>Screen</span>
+      <span data-i18n="Screen">Screen</span>
     </a>
     <a href="#" onclick="event.preventDefault();navTo('history')" id="nav-history" aria-label="History">
       <svg class="nav-icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="8" y1="8" x2="8" y2="16"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="16" y1="8" x2="16" y2="16"/></svg>
-      <span>History</span>
+      <span data-i18n="History">History</span>
     </a>
     <a href="#" onclick="event.preventDefault();showClinicianProfile()" id="nav-profile" aria-label="Profile">
       <svg class="nav-icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      <span>Profile</span>
+      <span data-i18n="Profile">Profile</span>
     </a>
   </nav>
 </div>
@@ -462,8 +481,508 @@ body { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif; b
 
 <script>
 "use strict";
+
+/* ===== LOCALIZATION ===== */
+const LANG_KEY = 'user-lang';
+let currentLang = localStorage.getItem(LANG_KEY) || 'en';
+
+const translations = {
+  en: {
+    "Add Patient": "Add Patient",
+    "Clinician Profile": "Clinician Profile",
+    "Edit Profile": "Edit Profile",
+    "Change Password": "Change Password",
+    "Log Out": "Log Out",
+    "Account": "Account",
+    "App Information": "App Information",
+    "Application": "Application",
+    "Version": "Version",
+    "AI Model": "AI Model",
+    "Model AUC": "Model AUC",
+    "Clinician": "Clinician",
+    "Role": "Role",
+    "Session": "Session",
+    "Active": "Active",
+    "DR Screening": "DR Screening",
+    "EfficientNetV2B0": "EfficientNetV2B0",
+    "Could not load profile": "Could not load profile",
+    "Please check your connection.": "Please check your connection.",
+    "Retry": "Retry",
+    "Update your display name and email. Role cannot be changed.": "Update your display name and email. Role cannot be changed.",
+    "Save Changes": "Save Changes",
+    "Saving...": "Saving...",
+    "Could not update profile.": "Could not update profile.",
+    "Name must be at least 2 characters.": "Name must be at least 2 characters.",
+    "Enter a valid email address.": "Enter a valid email address.",
+    "Network error. Please try again.": "Network error. Please try again.",
+    "Current Password": "Current Password",
+    "New Password": "New Password",
+    "Confirm New Password": "Confirm New Password",
+    "Changing...": "Changing...",
+    "Could not change password.": "Could not change password.",
+    "Please enter your current password.": "Please enter your current password.",
+    "New password must be at least 8 characters.": "New password must be at least 8 characters.",
+    "New password and confirmation do not match.": "New password and confirmation do not match.",
+    "New password must be different from current password.": "New password must be different from current password.",
+    "Enter your current password and choose a new one (minimum 8 characters).": "Enter your current password and choose a new one (minimum 8 characters).",
+    "Cancel": "Cancel",
+    "Loading profile...": "Loading profile...",
+    "Dashboard": "Dashboard",
+    "Patients": "Patients",
+    "Screen": "Screen",
+    "History": "History",
+    "Profile": "Profile",
+    "Pending Reviews": "Pending Reviews",
+    "Clinician Assessment": "Clinician Assessment",
+    "AI-assisted screening result": "AI-assisted screening result",
+    "Assessment": "Assessment",
+    "No Diabetic Retinopathy": "No Diabetic Retinopathy",
+    "Diabetic Retinopathy Present": "Diabetic Retinopathy Present",
+    "Image Not Gradable": "Image Not Gradable",
+    "Other Finding": "Other Finding",
+    "Uncertain - Requires Further Evaluation": "Uncertain - Requires Further Evaluation",
+    "Clinician Confidence": "Clinician Confidence",
+    "Override Reason": "Override Reason",
+    "Clinician Notes": "Clinician Notes",
+    "Submit": "Submit",
+    "Image Not Suitable for Screening": "Image Not Suitable for Screening",
+    "Image Quality Insufficient": "Image Quality Insufficient",
+    "Image File Error": "Image File Error",
+    "The image does not appear to be a retinal fundus photograph. Please use a fundus camera or retinal imaging device to capture the image correctly.": "The image does not appear to be a retinal fundus photograph. Please use a fundus camera or retinal imaging device to capture the image correctly.",
+    "The image quality is too poor for reliable screening. Please recapture with better lighting and focus.": "The image quality is too poor for reliable screening. Please recapture with better lighting and focus.",
+    "The image file appears to be corrupted or in an unsupported format. Please try again with a valid image file.": "The image file appears to be corrupted or in an unsupported format. Please try again with a valid image file.",
+    "Screening Detail": "Screening Detail",
+    "Clinician Assessment (Completed)": "Clinician Assessment (Completed)",
+    "AI-Assisted Screening": "AI-Assisted Screening",
+    "AI Result": "AI Result",
+    "AI Confidence": "AI Confidence",
+    "Model": "Model",
+    "Threshold": "Threshold",
+    "Patient": "Patient",
+    "Name": "Name",
+    "Patient ID": "Patient ID",
+    "View Full Patient Profile": "View Full Patient Profile",
+    "AI Model": "AI Model",
+    "5-Stage Visualization": "5-Stage Visualization",
+    "Original Image": "Original Image",
+    "Preprocessed": "Preprocessed",
+    "Segmented": "Segmented",
+    "Classified": "Classified",
+    "Not generated": "Not generated",
+    "Retinal Image — Original": "Retinal Image — Original",
+    "Click to enlarge": "Click to enlarge",
+    "Image unavailable": "Image unavailable",
+    "Assessment (Completed)": "Assessment (Completed)",
+    "Status": "Status",
+    "Reviewed At": "Reviewed At",
+    "Clinician": "Clinician",
+    "Assessment *": "Assessment *",
+    "Select assessment...": "Select assessment...",
+    "Clinician Confidence (0-100%)": "Clinician Confidence (0-100%)",
+    "Override Reason *": "Override Reason *",
+    "Submit Assessment": "Submit Assessment",
+    "Submitting...": "Submitting...",
+    "View Patient": "View Patient",
+    "Back to Patient": "Back to Patient",
+    "Back to History": "Back to History",
+    "Screenings": "Screenings",
+    "No DR": "No DR",
+    "DR Present": "DR Present",
+    "This is an AI-assisted screening result, not a clinical diagnosis": "This is an AI-assisted screening result, not a clinical diagnosis",
+    "Assessment differs from AI screening result": "Assessment differs from AI screening result",
+    "Welcome back": "Welcome back",
+    "Quick Actions": "Quick Actions",
+    "Recent Screenings": "Recent Screenings",
+    "Loading recent screenings...": "Loading recent screenings...",
+    "Search by name or ID...": "Search by name or ID...",
+    "Search": "Search",
+    "Loading patients...": "Loading patients...",
+    "Cancel": "Cancel",
+    "Patient Name *": "Patient Name *",
+    "Age *": "Age *",
+    "Gender *": "Gender *",
+    "Select...": "Select...",
+    "Male": "Male",
+    "Female": "Female",
+    "Other": "Other",
+    "Phone *": "Phone *",
+    "Email": "Email",
+    "Address": "Address",
+    "Create Patient": "Create Patient",
+    "Screening History": "Screening History",
+    "Enter Patient ID (e.g. P-000004)": "Enter Patient ID (e.g. P-000004)",
+    "Load": "Load",
+    "Search patient history": "Search patient history",
+    "Enter a Patient ID above to view their screening history.": "Enter a Patient ID above to view their screening history.",
+    "New Screening": "New Screening",
+    "Step 1 — Select Patient": "Step 1 — Select Patient",
+    "Patient ID (e.g. P-000004)": "Patient ID (e.g. P-000004)",
+    "Step 2 — Upload Retinal Image": "Step 2 — Upload Retinal Image",
+    "Accepted: JPG, PNG": "Accepted: JPG, PNG",
+    "Analyze Image": "Analyze Image",
+    "AI Screening Result": "AI Screening Result",
+    "Clinician Notes (optional)": "Clinician Notes (optional)",
+    "Add clinical observations...": "Add clinical observations...",
+    "Save Screening Record": "Save Screening Record",
+    "Patient Profile": "Patient Profile",
+    "Back": "Back",
+    "Loading patient...": "Loading patient...",
+    "Loading pending screenings...": "Loading pending screenings...",
+    "Screening Detail": "Screening Detail",
+    "Loading screening...": "Loading screening...",
+    "Clinician Profile": "Clinician Profile",
+    "DR Screening": "DR Screening",
+    "AI-Powered Diabetic Retinopathy Screening": "AI-Powered Diabetic Retinopathy Screening",
+    "Login": "Login",
+    "Sign Up": "Sign Up",
+    "Clinician Name": "Clinician Name",
+    "Dr. A. Patel": "Dr. A. Patel",
+    "doctor@clinic.org": "doctor@clinic.org",
+    "Password": "Password",
+    "Enter your password": "Enter your password",
+    "Remember me": "Remember me",
+    "Forgot password?": "Forgot password?",
+    "Log In": "Log In",
+    "Sign in with Google": "Sign in with Google",
+    "AI · EfficientNetV2B0 · AUC 0.996": "AI · EfficientNetV2B0 · AUC 0.996",
+    "No screenings yet": "No screenings yet",
+    "Start your first retinal screening to see results.": "Start your first retinal screening to see results.",
+    "Unable to load screenings": "Unable to load screenings",
+    "Please try again.": "Please try again.",
+    "No patients found": "No patients found",
+    "Click \"Add Patient\" to create a new record.": "Click \"Add Patient\" to create a new record.",
+    "Unable to load patients": "Unable to load patients",
+    "Unable to load pending reviews": "Unable to load pending reviews",
+    "Loading history...": "Loading history...",
+    "Loading profile...": "Loading profile...",
+    "Reset Password": "Reset Password",
+    "Enter your email and we will send a reset link.": "Enter your email and we will send a reset link.",
+    "Send Link": "Send Link",
+    "Please enter your email.": "Please enter your email.",
+    "Reset link sent. Check your inbox.": "Reset link sent. Check your inbox.",
+    "Could not send reset email.": "Could not send reset email.",
+    "Logged out successfully": "Logged out successfully",
+    "Name is required": "Name is required",
+    "Please enter a valid name (letters, spaces, hyphens, apostrophes).": "Please enter a valid name (letters, spaces, hyphens, apostrophes).",
+    "Age is required": "Age is required",
+    "Please enter a valid age (0-130).": "Please enter a valid age (0-130).",
+    "Please select gender.": "Please select gender.",
+    "Phone is required": "Phone is required",
+    "Please enter a valid phone (digits, +, -, spaces, 6-20 chars).": "Please enter a valid phone (digits, +, -, spaces, 6-20 chars).",
+    "Please enter a valid email or leave empty.": "Please enter a valid email or leave empty.",
+    "Patient created successfully.": "Patient created successfully.",
+    "Could not create patient. Please try again.": "Could not create patient. Please try again.",
+    "Could not load patient. Please try again.": "Could not load patient. Please try again.",
+    "Add a clinical note before saving.": "Add a clinical note before saving.",
+    "Screening record saved.": "Screening record saved.",
+    "Could not save screening record.": "Could not save screening record.",
+    "No patient found with this ID.": "No patient found with this ID.",
+    "Patient ID is required.": "Patient ID is required.",
+    "No patient selected.": "No patient selected.",
+    "No image selected.": "No image selected.",
+    "Image is too large (max 10MB). Please use a smaller file.": "Image is too large (max 10MB). Please use a smaller file.",
+    "Patient not found.": "Patient not found.",
+    "Could not load screenings. Please try again.": "Could not load screenings. Please try again.",
+    "Could not load screening. Please try again.": "Could not load screening. Please try again.",
+    "Could not load reviews. Please try again.": "Could not load reviews. Please try again.",
+    "Assessment is required.": "Assessment is required.",
+    "Override reason is required when assessment differs from AI or is non-diagnostic.": "Override reason is required when assessment differs from AI or is non-diagnostic.",
+    "Clinician assessment saved.": "Clinician assessment saved.",
+    "Could not save clinician assessment.": "Could not save clinician assessment.",
+    "Logged in as": "Logged in as",
+    "Pending review": "Pending review",
+    "Reviewed": "Reviewed",
+    "Edit": "Edit",
+    "Change Password": "Change Password",
+    "Edit Profile": "Edit Profile",
+    "Save Changes": "Save Changes",
+    "New Password": "New Password",
+    "Update Password": "Update Password",
+    "Profile updated.": "Profile updated.",
+    "Could not update profile.": "Could not update profile.",
+    "Password updated.": "Password updated.",
+    "Could not update password.": "Could not update password.",
+    "Confirm Logout": "Confirm Logout",
+    "Are you sure you want to log out?": "Are you sure you want to log out?",
+    "Yes, Log Out": "Yes, Log Out",
+    "Cancel": "Cancel",
+    "yrs": "yrs",
+    "No screenings yet": "No screenings yet",
+    "Start a new screening for this patient.": "Start a new screening for this patient.",
+    "Delete patient?": "Delete patient?",
+    "This will permanently remove the patient and all linked screenings.": "This will permanently remove the patient and all linked screenings.",
+    "Delete": "Delete",
+    "Patient deleted.": "Patient deleted.",
+    "Could not delete patient.": "Could not delete patient.",
+    "Network error": "ನೆಟ್‌ವರ್ಕ್ ದೋಷ",
+    "Patient not found.": "ರೋಗಿ ಸಿಗಲಿಲ್ಲ.",
+  },
+  kn: {
+    "Add Patient": "ರೋಗಿಯನ್ನು ಸೇರಿಸಿ",
+    "Clinician Profile": "ವೈದ್ಯರ ಪ್ರೊಫೈಲ್",
+    "Edit Profile": "ಪ್ರೊಫೈಲ್ ಸಂಪಾದಿಸಿ",
+    "Change Password": "ಪಾಸ್‌ವರ್ಡ್ ಬದಲಾಯಿಸಿ",
+    "Log Out": "ಲಾಗ್ ಔಟ್",
+    "Account": "ಖಾತೆ",
+    "App Information": "ಅಪ್ಲಿಕೇಶನ್ ಮಾಹಿತಿ",
+    "Application": "ಅಪ್ಲಿಕೇಶನ್",
+    "Version": "ಆವೃತ್ತಿ",
+    "AI Model": "AI ಮಾದರಿ",
+    "Model AUC": "ಮಾದರಿ AUC",
+    "Clinician": "ವೈದ್ಯರು",
+    "Role": "ಪಾತ್ರ",
+    "Session": "ಸೆಷನ್",
+    "Active": "ಸಕ್ರಿಯ",
+    "DR Screening": "DR ತಪಾಸಣೆ",
+    "EfficientNetV2B0": "EfficientNetV2B0",
+    "Could not load profile": "ಪ್ರೊಫೈಲ್ ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಿಲ್ಲ",
+    "Please check your connection.": "ದಯವಿಟ್ಟು ನಿಮ್ಮ ಸಂಪರ್ಕವನ್ನು ಪರಿಶೀಲಿಸಿ.",
+    "Retry": "ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ",
+    "Update your display name and email. Role cannot be changed.": "ನಿಮ್ಮ ಪ್ರದರ್ಶನ ಹೆಸರು ಮತ್ತು ಇಮೇಲ್ ಅನ್ನು ನವೀಕರಿಸಿ. ಪಾತ್ರವನ್ನು ಬದಲಾಯಿಸಲಾಗುವುದಿಲ್ಲ.",
+    "Save Changes": "ಬದಲಾವಣೆಗಳನ್ನು ಉಳಿಸಿ",
+    "Saving...": "ಉಳಿಸಲಾಗುತ್ತಿದೆ...",
+    "Could not update profile.": "ಪ್ರೊಫೈಲ್ ನವೀಕರಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ.",
+    "Name must be at least 2 characters.": "ಹೆಸರು ಕನಿಷ್ಠ 2 ಅಕ್ಷರಗಳಾಗಿರಬೇಕು.",
+    "Enter a valid email address.": "ಮಾನ್ಯವಾದ ಇಮೇಲ್ ವಿಳಾಸವನ್ನು ನಮೂದಿಸಿ.",
+    "Network error. Please try again.": "ನೆಟ್‌ವರ್ಕ್ ದೋಷ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+    "Current Password": "ಪ್ರಸ್ತುತ ಪಾಸ್‌ವರ್ಡ್",
+    "New Password": "ಹೊಸ ಪಾಸ್‌ವರ್ಡ್",
+    "Confirm New Password": "ಹೊಸ ಪಾಸ್‌ವರ್ಡ್ ದೃಢೀಕರಿಸಿ",
+    "Changing...": "ಬದಲಾಯಿಸಲಾಗುತ್ತಿದೆ...",
+    "Could not change password.": "ಪಾಸ್‌ವರ್ಡ್ ಬದಲಾಯಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ.",
+    "Please enter your current password.": "ದಯವಿಟ್ಟು ನಿಮ್ಮ ಪ್ರಸ್ತುತ ಪಾಸ್‌ವರ್ಡ್ ನಮೂದಿಸಿ.",
+    "New password must be at least 8 characters.": "ಹೊಸ ಪಾಸ್‌ವರ್ಡ್ ಕನಿಷ್ಠ 8 ಅಕ್ಷರಗಳಾಗಿರಬೇಕು.",
+    "New password and confirmation do not match.": "ಹೊಸ ಪಾಸ್‌ವರ್ಡ್ ಮತ್ತು ದೃಢೀಕರಣ ಹೊಂದಿಕೆಯಾಗುತ್ತಿಲ್ಲ.",
+    "New password must be different from current password.": "ಹೊಸ ಪಾಸ್‌ವರ್ಡ್ ಪ್ರಸ್ತುತ ಪಾಸ್‌ವರ್ಡ್‌ನಿಂದ ಭಿನ್ನವಾಗಿರಬೇಕು.",
+    "Enter your current password and choose a new one (minimum 8 characters).": "ನಿಮ್ಮ ಪ್ರಸ್ತುತ ಪಾಸ್‌ವರ್ಡ್ ನಮೂದಿಸಿ ಮತ್ತು ಹೊಸದನ್ನು ಆರಿಸಿ (ಕನಿಷ್ಠ 8 ಅಕ್ಷರಗಳು).",
+    "Cancel": "ರದ್ದುಮಾಡಿ",
+    "Loading profile...": "ಪ್ರೊಫೈಲ್ ಲೋಡ್ ಆಗುತ್ತಿದೆ...",
+    "Dashboard": "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
+    "Network error": "ನೆಟ್‌ವರ್ಕ್ ದೋಷ",
+    "Patient not found.": "ರೋಗಿ ಸigilla.",
+    "Patients": "ರೋಗಿಗಳು",
+    "Screen": "ತಪಾಸಣೆ",
+    "History": "ಇತಿಹಾಸ",
+    "Profile": "ಪ್ರೊಫೈಲ್",
+    "Pending Reviews": "ಬಾಕಿ ಇರುವ ವಿಮರ್ಶೆಗಳು",
+    "Screening Detail": "ತಪಾಸಣೆಯ ವಿವರ",
+    "Clinician Assessment": "ವೈದ್ಯರ ಮೌಲ್ಯಮಾಪನ",
+    "Clinician Assessment (Completed)": "ವೈದ್ಯರ ಮೌಲ್ಯಮಾಪನ (ಪೂರ್ಣಗೊಂಡಿದೆ)",
+    "AI-Assisted Screening": "AI-ಸಹಾಯದ ತಪಾಸಣೆ",
+    "AI Result": "AI ಫಲಿತಾಂಶ",
+    "AI Confidence": "AI ಆತ್ಮವಿಶ್ವಾಸ",
+    "Model": "ಮಾದರಿ (Model)",
+    "Threshold": "ಥ್ರೆಶೋಲ್ಡ್ (Threshold)",
+    "Patient": "ರೋಗಿ",
+    "Name": "ಹೆಸರು",
+    "Patient ID": "ರೋಗಿಯ ID",
+    "View Full Patient Profile": "ರೋಗಿಯ ಸಂಪೂರ್ಣ ಪ್ರೊಫೈಲ್ ವೀಕ್ಷಿಸಿ",
+    "AI Model": "AI ಮಾಡೆಲ್",
+    "5-Stage Visualization": "5-ಹಂತದ ದೃಶ್ಯೀಕರಣ",
+    "Original Image": "ಮೂಲ ಚಿತ್ರ",
+    "Preprocessed": "ಮುಂಚಿತವಾಗಿ ಸಂಸ್ಕರಿಸಿದ ಚಿತ್ರ",
+    "Segmented": "ವಿಭಾಗಿಸಿದ ಚಿತ್ರ",
+    "Classified": "ವರ್ಗೀಕರಿಸಿದ ಚಿತ್ರ",
+    "Not generated": "ರಚಿಸಲಾಗಿಲ್ಲ",
+    "Retinal Image — Original": "ರೆಟಿನಲ್ ಚಿತ್ರ — ಮೂಲ",
+    "Click to enlarge": "ದೊಡ್ಡದಾಗಿ ನೋಡಲು ಕ್ಲಿಕ್ ಮಾಡಿ",
+    "Image unavailable": "ಚಿತ್ರ ಲಭ್ಯವಿಲ್ಲ",
+    "Assessment (Completed)": "ಮೌಲ್ಯಮಾಪನ (ಪೂರ್ಣಗೊಂಡಿದೆ)",
+    "Status": "ಸ್ಥಿತಿ",
+    "Reviewed At": "ವಿಮರ್ಶೆಯ ಸಮಯ",
+    "Clinician": "ವೈದ್ಯರು",
+    "Override Reason": "ಓವರ್‌ರೈಡ್ (ತಿದ್ದುಪಡಿ) ಕಾರಣ",
+    "Clinician Notes": "ವೈದ್ಯರ ಟಿಪ್ಪಣಿಗಳು",
+    "Assessment *": "ಮೌಲ್ಯಮಾಪನ *",
+    "Select assessment...": "ಮೌಲ್ಯಮಾಪನ ಆಯ್ಕೆಮಾಡಿ...",
+    "Clinician Confidence (0-100%)": "ವೈದ್ಯರ ಆತ್ಮವಿಶ್ವಾಸ (0-100%)",
+    "Override Reason *": "ಓವರ್‌ರೈಡ್ (ತಿದ್ದುಪಡಿ) ಕಾರಣ *",
+    "Submit Assessment": "ಮೌಲ್ಯಮಾಪನ ಸಲ್ಲಿಸಿ",
+    "Submitting...": "ಸಲ್ಲಿಸಲಾಗುತ್ತಿದೆ...",
+    "View Patient": "ರೋಗಿಯನ್ನು ನೋಡಿ",
+    "Back": "ಹಿಂದಕ್ಕೆ",
+    "Back to Patient": "ರೋಗಿಯ ಪ್ರೊಫೈಲ್‌ಗೆ ಹೋಗಿ",
+    "Back to History": "ಇತಿಹಾಸಕ್ಕೆ ಹೋಗಿ",
+    "AI-assisted screening result": "AI-ಸಹಾಯದ ತಪಾಸಣೆ ಫಲಿತಾಂಶ",
+    "Assessment": "ಮೌಲ್ಯಮಾಪನ",
+    "No Diabetic Retinopathy": "ಡಯಾಬಿಟಿಕ್ ರೆಟಿನೋಪತಿ ಇಲ್ಲ",
+    "Diabetic Retinopathy Present": "ಡಯಾಬಿಟಿಕ್ ರೆಟಿನೋಪತಿ ಇದೆ",
+    "Image Not Gradable": "ಚಿತ್ರವನ್ನು ಗ್ರೇಡ್ ಮಾಡಲು ಸಾಧ್ಯವಿಲ್ಲ",
+    "Other Finding": "ಇತರೆ ಮಾಹಿತಿ",
+    "Uncertain - Requires Further Evaluation": "ಅನಿಶ್ಚಿತ - ಹೆಚ್ಚಿನ ಮೌಲ್ಯಮಾಪನ ಅಗತ್ಯವಿದೆ",
+    "Clinician Confidence": "ವೈದ್ಯರ ಆತ್ಮವಿಶ್ವಾಸ",
+    "Override Reason": "ಓವರ್‌ರೈಡ್ (ತಿದ್ದುಪಡಿ) ಕಾರಣ",
+    "Clinician Notes": "ವೈದ್ಯರ ಟಿಪ್ಪಣಿಗಳು",
+    "Submit": "ಸಲ್ಲಿಸಿ",
+    "Image Not Suitable for Screening": "ತಪಾಸಣೆಗೆ ಚಿತ್ರ ಸೂಕ್ತವಲ್ಲ",
+    "Image Quality Insufficient": "ಚಿತ್ರದ ಗುಣಮಟ್ಟ ಸಾಕಷ್ಟಿಲ್ಲ",
+    "Image File Error": "ಚಿತ್ರ ಫೈಲ್ ದೋಷ",
+    "The image does not appear to be a retinal fundus photograph. Please use a fundus camera or retinal imaging device to capture the image correctly.": "ಈ ಚಿತ್ರವು ರೆಟಿನಲ್ ಫಂಡಸ್ ಫೋಟೋಗ್ರಾಫ್‌ನಂತೆ ಕಾಣುತ್ತಿಲ್ಲ. ದಯವಿಟ್ಟು ಫಂಡಸ್ ಕ್ಯಾಮೆರಾ ಅಥವಾ ರೆಟಿನಲ್ ಇಮೇಜಿಂಗ್ ಸಾಧನ ಬಳಸಿ ಸರಿಯಾಗಿ ಚಿತ್ರ ಸೆರೆಹಿಡಿಯಿರಿ.",
+    "The image quality is too poor for reliable screening. Please recapture with better lighting and focus.": "ಚಿತ್ರದ ಗುಣಮಟ್ಟವು ವಿಶ್ವಾಸಾರ್ಹ ತಪಾಸಣೆಗೆ ತೀರಾ ಹದಗೆಟ್ಟಿದೆ. ದಯವಿಟ್ಟು ಉತ್ತಮ ಬೆಳಕು ಮತ್ತು ಫೋಕಸ್‌ನೊಂದಿಗೆ ಮತ್ತೆ ಚಿತ್ರವನ್ನು ಸೆರೆಹಿಡಿಯಿರಿ.",
+    "The image file appears to be corrupted or in an unsupported format. Please try again with a valid image file.": "ಚಿತ್ರ ಫೈಲ್ ಹಾನಿಗೊಳಗಾಗಿದೆ ಅಥವಾ ಬೆಂಬಲಿತವಾಗಿಲ್ಲ. ದಯವಿಟ್ಟು ಮಾನ್ಯವಾದ ಚಿತ್ರ ಫೈಲ್‌ನೊಂದಿಗೆ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+    "Patients": "ರೋಗಿಗಳು",
+    "Screenings": "ತಪಾಸಣೆಗಳು",
+    "No DR": "ಡಯಾಬಿಟಿಕ್ ರೆಟಿನೋಪತಿ ಇಲ್ಲ",
+    "DR Present": "ಡಯಾಬಿಟಿಕ್ ರೆಟಿನೋಪತಿ ಇದೆ",
+    "This is an AI-assisted screening result, not a clinical diagnosis": "ಇದು AI-ಸಹಾಯದ ತಪಾಸಣೆ ಫಲಿತಾಂಶ, ವೈದ್ಯಕೀಯ ರೋಗನಿರ್ಣಯವಲ್ಲ",
+    "Assessment differs from AI screening result": "ಮೌಲ್ಯಮಾಪನವು AI ತಪಾಸಣೆ ಫಲಿತಾಂಶಕ್ಕಿಂತ ಭಿನ್ನವಾಗಿದೆ",
+    "Welcome back": "ಮತ್ತೆ ಸ್ವಾಗತ",
+    "Quick Actions": "ವೇಗ ಕ್ರಿಯೆಗಳು",
+    "Recent Screenings": "ಇತ್ತೀನ ತಪಾಸಣೆಗಳು",
+    "Loading recent screenings...": "ಇತ್ತೀನ ತಪಾಸಣೆಗಳನ್ನು ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ...",
+    "Search by name or ID...": "ಹೆಸರು ಅಥವಾ ID ಮೇಲೆ ಹುಡುಕಿ...",
+    "Search": "ಹುಡುಕಿ",
+    "Loading patients...": "ರೋಗಿಗಳನ್ನು ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ...",
+    "Cancel": "ರದ್ದುಮಾಡಿ",
+    "Patient Name *": "ರೋಗಿಯ ಹೆಸರು *",
+    "Age *": "ವಯಸ್ಸು *",
+    "Gender *": "ಲಿಂಗ *",
+    "Select...": "ಆಯ್ಕೆಮಾಡಿ...",
+    "Male": "ಪುರುಷ",
+    "Female": "ಕೆಳವೆ",
+    "Other": "ಇತರ",
+    "Phone *": "ಫೋನ್ *",
+    "Email": "ಇಮೇಲ್",
+    "Address": "ವಿಳಾಸ",
+    "Create Patient": "ರೋಗಿಯನ್ನು ರಚಿಸಿ",
+    "Screening History": "ತಪಾಸಣೆಯ ಇತಿಹಾಸ",
+    "Enter Patient ID (e.g. P-000004)": "ರೋಗಿಯ ID ನಮೂದು ಮಾಡಿ (ಉದಾ: P-000004)",
+    "Load": "ಲೋಡ್",
+    "Search patient history": "ರೋಗಿಯ ಇತಿಹಾಸವನ್ನು ಹುಡುಕಿ",
+    "Enter a Patient ID above to view their screening history.": "ರೋಗಿಯ ID ಮೇಲೆ ನಮೂದು ಮಾಡಿ ಅವರ ತಪಾಸಣೆಯ ಇತಿಹಾಸವನ್ನು ವೀಕ್ಷಿಸಿ.",
+    "New Screening": "ಹೊಸ ತಪಾಸಣೆ",
+    "Step 1 — Select Patient": "ಹಂತ 1 — ರೋಗಿಯನ್ನೆ ಆಯ್ಕೆಮಾಡಿ",
+    "Patient ID (e.g. P-000004)": "ರೋಗಿಯ ID (ಉದಾ: P-000004)",
+    "Step 2 — Upload Retinal Image": "ಹಂತ 2 — ರೆಟಿನಲ್ ಚಿತ್ರವನ್ನು ಅಪ್‌ಲೋಡ್ ಮಾಡಿ",
+    "Accepted: JPG, PNG": "ಸ್ವೀಕೃತ: JPG, PNG",
+    "Analyze Image": "ಚಿತ್ರವನ್ನು ವಿಶ್ಲೇಷಿಸಿ",
+    "AI Screening Result": "AI ತಪಾಸಣೆ ಫಲಿತಾಂಶ",
+    "Clinician Notes (optional)": "ವೈದ್ಯರ ಟಿಪ್ಪಣಿಗಳು (ದೇವರಾಗಿ)",
+    "Add clinical observations...": "ವೈದ್ಯಕೀಯ ವಿಧಾನಗಳನ್ನು ಸೇರಿಸಿ...",
+    "Save Screening Record": "ತಪಾಸಣೆಯ ದಾಖಲೆಯನ್ನು ಉಳಿಸಿ",
+    "Patient Profile": "ರೋಗಿಯ ಪ್ರೊಫೈಲ್",
+    "Back": "ಹಿಂದಕ್ಕೆ",
+    "Loading patient...": "ರೋಗಿಯನ್ನು ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ...",
+    "Loading pending screenings...": "ಬಾಕಿ ಇರುವ ತಪಾಸಣೆಗಳನ್ನು ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ...",
+    "Screening Detail": "ತಪಾಸಣೆಯ ವಿವರ",
+    "Loading screening...": "ತಪಾಸಣೆಯನ್ನು ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ...",
+    "Clinician Profile": "ವೈದ್ಯರ ಪ್ರೊಫೈಲ್",
+    "DR Screening": "ಡ್ರ್ ತಪಾಸಣೆ",
+    "AI-Powered Diabetic Retinopathy Screening": "AI-ಶಕ್ತಿಯುತ ಡಯಾಬಿಟಿಕ್ ರೆಟಿನೋಪತಿ ತಪಾಸಣೆ",
+    "Login": "ಲಾಗಿನ್",
+    "Sign Up": "ದಾಖಲಾಗಿ",
+    "Clinician Name": "ವೈದ್ಯರ ಹೆಸರು",
+    "Dr. A. Patel": "ಡಾ. ಎ. ಪಾಟೆಲ್",
+    "doctor@clinic.org": "ಡಾಕ್ಟರ್@ಕ್ಲಿನಿಕ್.ऑರ್",
+    "Password": "ಪಾಸ್‌ವರ್ಡ್",
+    "Enter your password": "ನಿಮ್ಮ ಪಾಸ್‌ವರ್ಡ್ ನಮೂದು ಮಾಡಿ",
+    "Remember me": "ನನ್ನ ಮರೆಯಬೇಡಿ",
+    "Forgot password?": "ಪಾಸ್‌ವರ್ಡ್ ಮರೆಯಲಾಗಿದೆ?",
+    "Log In": "ಲಾಗಿನ್ ಮಾಡಿ",
+    "Sign in with Google": "ಗೂಗಲ್ ಅವರ ಮೂಲಕ ದಾಖಲಾಗಿ",
+    "AI · EfficientNetV2B0 · AUC 0.996": "AI · EfficientNetV2B0 · AUC 0.996",
+    "No screenings yet": "아무 tಪাসಣೆಗಳು 없ე",
+    "Start your first retinal screening to see results.": "ಪ್ರಥಮ retinal ತಪasಣೆಯನ್ನು ಪ್ರಾರಂಭಿಸಿ ಫಲಿತांಶವನ್ನು ನೋಡಲು.",
+    "Unable to load screenings": "ತಪಾಸಣೆಗಳನ್ನು ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಿಲ್ಲ",
+    "Please try again.": "ದಯವಿತ್ತು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
+    "No patients found": "ಯಾವ ರೋಗಿಯೂ ಸ found",
+    "Click \"Add Patient\" to create a new record.": "\"ರೋಗಿಯನ್ನು ಸೇರಿಸಿ\" ಕ್ಲಿಕ್ ಮಾಡಿ ಹೊಸ ದಾಖಲೆಯನ್ನು ರಚಿಸಿ.",
+    "Unable to load patients": "ರೋಗಿಗಳನ್ನು ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಿಲ್ಲ",
+    "Unable to load pending reviews": "ಬಾಕಿ ಇರುವ ವಿಮರ್ಶೆಗಳನ್ನು ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಿಲ್ಲ",
+    "Loading history...": "ಇತihasi ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ...",
+    "Loading profile...": "ಪ್ರೊಫೈಲ್ ಲೇಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ...",
+    "Reset Password": "ಪಾಸ್‌ವರ್ಡ್ रीसेट",
+    "Enter your email and we will send a reset link.": "ನಿಮ್ಮ ಇಮೇಲ್ ನಮೂdu ಮಾಡಿ ಮತ್ತು ಪುನಾ链接ವನ್ನು ಕಳುಹಿಸುತ್ತೇವೆ.",
+    "Send Link": "ಲिंक ಕಳುಹಿಸಿ",
+    "Please enter your email.": "ದಯವittu ನಿಮ್ಮ ಇಮೇಲ್ ನಮূdu ಮಾಡಿ.",
+    "Reset link sent. Check your inbox.": "रीसेट ಲಿಂк ಕಳsu ಆಗಿದೆ. ನಿಮ್ಮ ಇNBOXನ್ನು ಪರಿಶilhovಿ.",
+    "Could not send reset email.": "रीसेट ಇmeel ಕಳುಹಿಸಲು ಸಾಧ್ಯvilla.",
+    "Logged out successfully": "ಸ fahcಭavi ಆಗಿದೆ",
+    "Name is required": "ಹesaru ಅಗtವy.",
+    "Please enter a valid name (letters, spaces, hyphens, apostrophes).": "danyaittu Experi ಆಯdt ಹೊgadu (akshara, spaces, hyphen, apostrophe).",
+    "Age is required": "vayasu agtavya.",
+    "Please enter a valid age (0-130).": "danyaittu Exprer (0-130).",
+    "Please select gender.": "danyaittu lank select maadii.",
+    "Phone is required": "phonu agtavya.",
+    "Please enter a valid phone (digits, +, -, spaces, 6-20 chars).": "danyaittu Exprer (sankya, +, -, spaces, 6-20 char).",
+    "Please enter a valid email or leave empty.": "danyaittu Exprer email atau khali bisi.",
+    "Patient created successfully.": "Rogiyu rache agide.",
+    "Could not create patient. Please try again.": "Rogiyannu rachanemagalilla. Dayavittu mattu prayatnisi.",
+    "Could not load patient. Please try again.": "Rogiyannu lode masculialilla. Dayavittu mattu prayatnisi.",
+    "Add a clinical note before saving.": "Sulgai maadi note add maadi.",
+    "Screening record saved.": "Thapasane record saguve agide.",
+    "Could not save screening record.": "Thapasane record saguveagalaggilla.",
+    "No patient found with this ID.": "Ee ID ge rogiyu soddilla.",
+    "Patient ID is required.": "Rogiyu ID agtavya.",
+    "No patient selected.": "Yava rogiyu choice mausru ilulla.",
+    "No image selected.": "Chitra iruva illa.",
+    "Image is too large (max 10MB). Please use a smaller file.": "Chitra vishalavagi (max 10MB). Chikka file use maadi.",
+    "Patient not found.": "Rogiyu soddilla.",
+    "Could not load screenings. Please try again.": "Thapasane lode aguvikillvalli. Dayavittu mattu prayatnisi.",
+    "Could not load screening. Please try again.": "Thapasana lode aguvikillvalli. Dayavittu mattu prayatnisi.",
+    "Could not load reviews. Please try again.": "Vimarshe lode aguvikillvalli. Dayavittu mattu prayatnisi.",
+    "Assessment is required.": "Mulyamapana agtavya.",
+    "Override reason is required when assessment differs from AI or is non-diagnostic.": "AI dangna athava non-diagnostic allige mulyamapana bheda aagide, avda override karana agtavya.",
+    "Clinician assessment saved.": "Vaidyara mulyamapana saguve agide.",
+    "Could not save clinician assessment.": "Vaidyara mulyamapana saguveagalagilla.",
+    "Logged in as": "As aagide",
+    "Pending review": "Baki iruva vimarshe",
+    "Reviewed": "Vimarshe agide",
+    "Edit": "Sedirisi",
+    "Change Password": "Pasuword badalisi",
+    "Edit Profile": "Profillu sedirisi",
+    "Save Changes": "Bedele saguve",
+    "New Password": "Hosa pasuword",
+    "Update Password": "Pasuword update maadi",
+    "Profile updated.": "Profillu update aagide.",
+    "Could not update profile.": "Profillu update maaduvudillvalli.",
+    "Password updated.": "Pasuword update aagide.",
+    "Could not update password.": "Pasuword update maaduvudillvalli.",
+    "Confirm Logout": "Logout gurutisu",
+    "Are you sure you want to log out?": "Nivu logout maadabahvu aagidya?",
+    "Yes, Log Out": "Haudu, Logout maadi",
+    "Cancel": "Radu",
+    "yrs": "vayasu",
+    "No screenings yet": "Yava thapasane illa",
+    "Start a new screening for this patient.": "Ee rogiyakka hosa thapasana prarambisi.",
+    "Delete patient?": "Rogiyannu erase maadbahvu?",
+    "This will permanently remove the patient and all linked screenings.": "Ee rogiyu mattu alla jana thapasane shashvata viluvudilla.",
+    "Delete": "Erase maadi",
+    "Patient deleted.": "Rogiyu erase agide.",
+    "Could not delete patient.": "Rogiyannu erase maaduvudillvalli."
+  }
+};
+
+function t(key) { return translations[currentLang][key] || key; }
+
+function setLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem(LANG_KEY, lang);
+  updateUI();
+}
+
+function updateUI() {
+    // Translate static elements with data-i18n attribute
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[currentLang][key]) {
+            el.textContent = t(key);
+        }
+    });
+
+    // Update Language Switcher UI
+    if($('lang-toggle-en')) $('lang-toggle-en').className = (currentLang === 'en' ? 'active' : '');
+    if($('lang-toggle-kn')) $('lang-toggle-kn').className = (currentLang === 'kn' ? 'active' : '');
+
+    // Trigger re-render of active view
+    const activeView = views.find(v => $(`view-${v}`).style.display !== 'none');
+    if (activeView) {
+        navTo(activeView, true); // Assume navTo can accept a flag to prevent pushing state or re-render
+    }
+}
+
 const BASE = "/api";
-const views = ["dashboard","patients","add-patient","history","screen","profile","screening","clinician-profile"];
+const views = ["dashboard","patients","add-patient","history","screen","profile","screening","clinician-profile","pending-reviews"];
 let currentScreening = null;
 let sessionUser = { name: "Dr. Demo", email: "doctor@clinic.org", role: "Clinician" };
 let returnToView = null;
@@ -560,6 +1079,7 @@ async function handleReset() {
 }
 
 async function handleFirebaseAuth(e) {
+  console.log("RETINACARE_TRACE STEP_1 handleFirebaseAuth");
   e.preventDefault();
   const errEl = $("auth-error");
   errEl.classList.remove("show"); errEl.textContent = "";
@@ -572,6 +1092,7 @@ async function handleFirebaseAuth(e) {
     return;
   }
   try {
+    console.log("RETINACARE_TRACE STEP_2 signIn email modeemail+" mode="+authMode);
     if (authMode === "signup") {
       const name = $("auth-name") ? $("auth-name").value.trim() : "";
       await AuthAPI.signUp(name, email, pw);
@@ -603,7 +1124,9 @@ let unsubscribeAuth = null;
 function handleFirebaseInit() {
   // Initialize Firebase Auth listener and hide/show shell accordingly.
   AuthAPI.init().then(({ auth }) => {
+    console.log("RETINACARE_TRACE STEP_11 AuthAPI.init");
     unsubscribeAuth = AuthAPI.onAuthChange((user) => {
+      console.log("RETINACARE_AUTH_DEBUG: onAuthChange triggered user=", user ? (user.email || user.uid || JSON.stringify(user)) : null);
       const loginPage = $("login-page");
       const appShell = $("app-shell");
       if (user) {
@@ -611,7 +1134,7 @@ function handleFirebaseInit() {
         $("topbar-avatar").textContent = initials(sessionUser.name);
         loginPage.style.display = "none";
         appShell.style.display = "flex";
-        navTo("dashboard");
+        console.log("RETINACARE_TRACE STEP_12 navTo dashboard"); navTo("dashboard");
         loadDashboardData();
       } else {
         sessionUser = null;
@@ -685,9 +1208,9 @@ async function showClinicianProfile() {
           </div>
         </div>
         <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.5rem;">
-          <button class="btn btn-secondary btn-sm" onclick="showEditProfileForm()">Edit Profile</button>
-          <button class="btn btn-secondary btn-sm" onclick="showChangePasswordForm()">Change Password</button>
-          <button class="btn btn-danger btn-sm" onclick="handleLogout()">Log Out</button>
+          <button class="btn btn-secondary btn-sm" onclick="showEditProfileForm()">${t('Edit Profile')}</button>
+          <button class="btn btn-secondary btn-sm" onclick="showChangePasswordForm()">${t('Change Password')}</button>
+          <button class="btn btn-danger btn-sm" onclick="handleLogout()">${t('Log Out')}</button>
         </div>
       </div>
       <div class="card" style="margin-bottom:.7rem;">
@@ -801,7 +1324,7 @@ async function submitChangePassword(e) {
 }
 
 /* ===== NAVIGATION ===== */
-function navTo(id) {
+function navTo(id, noPush) {
   views.forEach(s => { const el = $("view-"+s); if (el) el.style.display = (id===s) ? "block" : "none"; });
   // Bottom nav highlight (skip non-nav views)
   ["dashboard","patients","screen","history","profile"].forEach(s => {
@@ -862,19 +1385,19 @@ async function loadRecentScreenings() {
       </a>`;
     }).join("");
   } catch (e) {
-    c.innerHTML = '<div class="empty-state"><h3>Unable to load screenings</h3><p>Please try again.</p></div>';
+    c.innerHTML = `<div class="empty-state"><h3>${t('Unable to load screenings')}</h3><p>${t('Please try again.')}</p></div>`;
   }
 }
 
 /* ===== PATIENTS LIST ===== */
 async function loadPatientsList(query) {
   const c = $("patients-list");
-  c.innerHTML = '<div class="loading"><span class="spinner"></span> Loading patients...</div>';
+  c.innerHTML = '<div class="loading"><span class="spinner"></span> '+t('Loading patients...')+'</div>';
   try {
     const url = query ? BASE+"/patients?q="+encodeURIComponent(query) : BASE+"/patients";
     const patients = await fetch(url).then(r=>r.json());
     if (!patients || patients.length===0) {
-      c.innerHTML = '<div class="empty-state"><div class="ic">&#128101;</div><h3>No patients found</h3><p>Click "Add Patient" to create a new record.</p></div>';
+      c.innerHTML = `<div class="empty-state"><div class="ic">&#128101;</div><h3>${t('No patients found')}</h3><p>${t('Click "Add Patient" to create a new record.')}</p></div>`;
       return;
     }
     // Enrich with screening counts
@@ -900,7 +1423,7 @@ async function loadPatientsList(query) {
       </div>`;
     }).join("");
   } catch (e) {
-    c.innerHTML = '<div class="empty-state"><h3>Unable to load patients</h3><p>Please try again.</p></div>';
+    c.innerHTML = `<div class="empty-state"><h3>${t('Unable to load patients')}</h3><p>${t('Please try again.')}</p></div>`;
   }
 }
 function searchPatientsEvent(e) { e.preventDefault(); loadPatientsList($("search-input").value.trim()); }
@@ -1127,7 +1650,7 @@ async function doDeletePatient(pid) {
     } else {
       toast(data.detail || "Could not delete patient", "err");
     }
-  } catch (e) { toast("Network error", "err"); }
+  } catch (e) { toast(t("Network error"), "err"); }
 }
 
 /* ===== SCREENING WORKFLOW ===== */
@@ -1179,7 +1702,7 @@ async function runScreeningEvent(e) {
   const file = $("img-file").files[0];
   if (!file) { toast("Please select an image", "err"); return; }
   const resultArea = $("result-area");
-  resultArea.innerHTML = '<div class="loading"><span class="spinner"></span> Analyzing retinal image with EfficientNetV2B0...</div>';
+  resultArea.innerHTML = '<div class="loading"><span class="spinner"></span> Analyzing retinal image...</div>';
   $("step-result-card").style.display = "block";
   const f = new FormData();
   f.append("patient_id", pid);
@@ -1187,44 +1710,112 @@ async function runScreeningEvent(e) {
   try {
     const res = await fetch(BASE+"/screenings/predict", { method: "POST", body: f });
     const data = await res.json();
+
+    // ── HANDLE REJECTION (ok: false) ──
     if (!data.ok) {
-      resultArea.innerHTML = '<div style="color:var(--danger);font-size:.85rem;">Screening failed. Please try again with a different image.</div>';
-      toast("Screening failed", "err");
+      const qStatus = data.image_quality?.status || "unknown";
+      const qMsg = data.image_quality?.message || "Image validation failed";
+      let errorTitle = "Image Not Suitable for Screening";
+      let errorMsg = qMsg;
+
+      if (qStatus === "non_fundus") {
+        errorTitle = "Image Not Suitable for DR Screening";
+        errorMsg = "The image does not appear to be a retinal fundus photograph. Please use a fundus camera or retinal imaging device to capture the image correctly.";
+      } else if (qStatus === "ungradable") {
+        errorTitle = "Image Quality Insufficient";
+        errorMsg = "The image quality is too poor for reliable screening. Please recapture with better lighting and focus.";
+      } else if (qStatus === "corrupted") {
+        errorTitle = "Image File Error";
+        errorMsg = "The image file appears to be corrupted or in an unsupported format. Please try again with a valid image file.";
+      }
+
+      resultArea.innerHTML = `
+        <div class="result-banner" style="background:linear-gradient(135deg,#fef3c7,#fde68a);border-left:4px solid #d48a2a;">
+          <h3 style="color:#92400e;margin:0;">${esc(errorTitle)}</h3>
+          <p style="font-size:.85rem;color:#78350f;margin-top:.5rem;margin-bottom:0;">${esc(errorMsg)}</p>
+        </div>
+        <div style="margin-top:.6rem;">
+          <div style="display:flex;align-items:center;gap:.6rem;padding:.6rem;background:var(--surface-2);border-radius:10px;border-left:3px solid #d48a2a;">
+            <div style="font-size:1.5rem;">⚠️</div>
+            <div style="font-size:.85rem;color:var(--text-secondary);">
+              <strong>No DR screening performed.</strong> The image did not pass validation checks required for reliable AI screening.
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:.6rem;">
+          <button class="btn btn-primary btn-sm" onclick="document.getElementById('img-file').click()">Try Another Image</button>
+        </div>`;
+
+      currentScreening = data;
+      toast("Image rejected", "err");
       return;
     }
+
+    // ── HANDLE SUCCESS (ok: true) ──
     currentScreening = data;
-    const isRisk = data.prediction === 1;
+    const aiResult = data.ai_result || {};
+    const imgQuality = data.image_quality || {};
+    const visualizations = data.visualizations || {};
+    const safety = data.safety || {};
+
+    const isRisk = aiResult.prediction === 1;
     const sid = data.screening_id;
-    const imgUrl = `${BASE}/screenings/${encodeURIComponent(sid)}/image`;
-    const heatUrl = `${BASE}/screenings/${encodeURIComponent(sid)}/heatmap`;
+
+    // Extract 5-stage paths from visualizations object
+    const origUrl  = visualizations.original_image     ? "/" + String(visualizations.original_image).replace(/\\/g,"/")     : "";
+    const prepUrl  = visualizations.preprocessed_image ? "/" + String(visualizations.preprocessed_image).replace(/\\/g,"/") : "";
+    const segUrl   = visualizations.segmented_image    ? "/" + String(visualizations.segmented_image).replace(/\\/g,"/")    : "";
+    const clsUrl   = visualizations.classified_image   ? "/" + String(visualizations.classified_image).replace(/\\/g,"/")   : "";
+    const gradUrl  = visualizations.gapcam_image       ? "/" + String(visualizations.gapcam_image).replace(/\\/g,"/")       : "";
+
     resultArea.innerHTML = `
       <div class="result-banner ${isRisk?'risk':'ok'}">
-        <h3>${isRisk ? 'DR Present - Refer to Ophthalmologist' : 'No DR Detected'}</h3>
-        <div class="prob-large">${(data.probability*100).toFixed(2)}%</div>
-        <div class="label-small">Confidence: ${(data.confidence*100).toFixed(1)}% &middot; Threshold: 0.50</div>
-        <p style="font-size:.82rem;color:${isRisk?'#a52a2a':'#1b6b3a'};margin-top:.3rem;">${esc(data.interpretation||"")}</p>
+        <h3>${isRisk ? 'AI Screening: DR Present' : 'AI Screening: No DR Detected'}</h3>
+        <div class="prob-large">${(aiResult.probability*100).toFixed(2)}%</div>
+        <div class="label-small">Model Confidence: ${(aiResult.confidence*100).toFixed(1)}% &middot; Image Quality: ${esc(imgQuality.status||'valid')}</div>
+        <p style="font-size:.82rem;color:${isRisk?'#a52a2a':'#1b6b3a'};margin-top:.3rem;"><strong>AI Result:</strong> ${esc(aiResult.interpretation||"")}</p>
+        <p style="font-size:.75rem;color:var(--text-subtle);margin-top:.4rem;font-style:italic;">⚠️ This is an AI-assisted screening result, not a clinical diagnosis. A qualified clinician must review before making clinical decisions.</p>
       </div>
-      <div style="margin-top:.6rem;">
-        <h4 style="font-size:.82rem;font-weight:700;color:var(--text-secondary);margin-bottom:.3rem;">GAP-CAM Visualization</h4>
-        <p style="font-size:.76rem;color:var(--text-subtle);margin-bottom:.4rem;">Highlighted regions contributed to the AI prediction. Tap an image to enlarge.</p>
+
+      <div style="margin-top:.8rem;">
+        <h4 style="font-size:.82rem;font-weight:700;color:var(--text-secondary);margin-bottom:.3rem;">5-Stage Analysis Pipeline</h4>
+        <p style="font-size:.76rem;color:var(--text-subtle);margin-bottom:.4rem;">Tap an image to enlarge. Stage 3 shows white blood vessels on black background.</p>
         <div class="gapcam-grid">
           <div>
-            <img src="${imgUrl}" alt="Original Retinal Image" style="cursor:pointer;" onclick="showImageModal('${imgUrl}','Original Retinal Image')" onerror="this.parentNode.innerHTML='<div class=empty-state>Image unavailable</div>'" />
-            <div class="gapcam-label">Original Retinal Image</div>
+            <img src="${origUrl}" alt="Original Image" style="cursor:pointer;max-height:170px;object-fit:contain;border-radius:8px;border:1px solid var(--border);" onclick="showImageModal('${origUrl}','1. Original Image')" onerror="this.parentNode.innerHTML='<div class=empty-state>Image unavailable</div>'" />
+            <div class="gapcam-label">1. Original</div>
           </div>
           <div>
-            <img src="${heatUrl}" alt="GAP-CAM Heatmap" style="cursor:pointer;" onclick="showImageModal('${heatUrl}','GAP-CAM Heatmap')" onerror="this.parentNode.innerHTML='<div class=empty-state>Heatmap unavailable</div>'" />
-            <div class="gapcam-label">GAP-CAM Heatmap</div>
+            <img src="${prepUrl}" alt="Preprocessed Image" style="cursor:pointer;max-height:170px;object-fit:contain;border-radius:8px;border:1px solid var(--border);" onclick="showImageModal('${prepUrl}','2. Preprocessed Image')" onerror="this.parentNode.innerHTML='<div class=empty-state>Not generated</div>'" />
+            <div class="gapcam-label">2. Preprocessed</div>
+          </div>
+          <div>
+            <img src="${segUrl}" alt="Segmented Image (FSG-Net)" style="cursor:pointer;max-height:170px;object-fit:contain;background:#000;border-radius:8px;border:1px solid var(--border);" onclick="showImageModal('${segUrl}','3. FSG-Net Vessel Segmentation (White vessels on black background)')" onerror="this.parentNode.innerHTML='<div class=empty-state style=background:#000;color:#fff>Not generated</div>'" />
+            <div class="gapcam-label">3. FSG-Net Vessels</div>
+          </div>
+          <div>
+            <img src="${clsUrl}" alt="Classified Result" style="cursor:pointer;max-height:170px;object-fit:contain;border-radius:8px;border:1px solid var(--border);" onclick="showImageModal('${clsUrl}','4. DR Screening Result (Original + AI Prediction)')" onerror="this.parentNode.innerHTML='<div class=empty-state>Not generated</div>'" />
+            <div class="gapcam-label">4. Screening Result</div>
+          </div>
+          <div>
+            <img src="${gradUrl}" alt="Grad-CAM" style="cursor:pointer;max-height:170px;object-fit:contain;border-radius:8px;border:1px solid var(--border);" onclick="showImageModal('${gradUrl}','5. Grad-CAM - Regions contributing to AI prediction (not clinical lesion map)')" onerror="this.parentNode.innerHTML='<div class=empty-state>Not generated</div>'" />
+            <div class="gapcam-label">5. Grad-CAM</div>
           </div>
         </div>
       </div>
-      <div style="margin-top:.7rem;padding:.6rem;background:var(--surface-2);border-radius:10px;font-size:.76rem;color:var(--text-secondary);line-height:1.45;">
-        <strong>Disclaimer:</strong> This AI output is intended as a screening/support tool and is not a substitute for evaluation by a qualified medical professional.
+
+      <div style="margin-top:.8rem;padding:.7rem;background:#f0f9ff;border-left:3px solid #0284c7;border-radius:6px;font-size:.75rem;color:#075985;line-height:1.5;">
+        <strong>Grad-CAM Explainability:</strong> The highlighted regions show which parts of the image the model used to make its prediction. This is NOT a clinical lesion map and should not be used for diagnosis. It is provided for model transparency only.
+      </div>
+
+      <div style="margin-top:.8rem;padding:.7rem;background:var(--surface-2);border-left:3px solid var(--primary);border-radius:6px;font-size:.75rem;color:var(--text-secondary);line-height:1.5;">
+        <strong>Important Disclaimer:</strong> This AI output is an assisted screening tool and NOT a diagnosis. It does not replace evaluation by a qualified ophthalmologist or retinal specialist. Clinical decisions must be made by a licensed healthcare professional after careful examination.
       </div>`;
+
     toast("Screening complete", "ok");
   } catch (err) {
     resultArea.innerHTML = '<div style="color:var(--danger);font-size:.85rem;">Could not reach the server. Please try again.</div>';
-    toast("Network error", "err");
+    toast(t("Network error"), "err");
   }
 }
 async function saveScreeningNotes() {
@@ -1242,7 +1833,7 @@ async function saveScreeningNotes() {
     } else {
       toast("Could not save notes", "err");
     }
-  } catch (e) { toast("Network error", "err"); }
+  } catch (e) { toast(t("Network error"), "err"); }
 }
 
 /* ===== HISTORY ===== */
@@ -1254,7 +1845,7 @@ function loadHistoryByIdSubmit(e) {
 }
 async function loadHistoryById(pid) {
   const c = $("history-content");
-  c.innerHTML = '<div class="loading"><span class="spinner"></span> Loading history...</div>';
+  c.innerHTML = '<div class="loading"><span class="spinner"></span> ' + t('Loading history...') + '</div>';
   try {
     const data = await fetch(BASE+"/patients/"+encodeURIComponent(pid)).then(r=>{ if(!r.ok) throw new Error("not found"); return r.json(); });
     const p = data.patient;
@@ -1329,6 +1920,37 @@ async function openScreeningDetail(sid, retView) {
       </div>
 
       <div class="card" style="margin-bottom:.6rem;">
+        <h2>5-Stage Visualization</h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.7rem;">
+          <div>
+            <div style="font-size:.78rem;font-weight:600;color:var(--text-secondary);margin-bottom:.2rem;">1. Original Image</div>
+            <img class="detail-img" src="${imgPath}" alt="Original" style="cursor:pointer;max-height:170px;object-fit:contain;border-radius:8px;border:1px solid var(--border);" onclick="showImageModal('${imgPath}','Original Image — ${esc(s.screening_id)}')" onerror="this.style.display='none';this.nextElementSibling.style.display='block';" />
+            <div style="display:none;font-size:.72rem;color:#c73e3e;">Image unavailable</div>
+          </div>
+          <div>
+            <div style="font-size:.78rem;font-weight:600;color:var(--text-secondary);margin-bottom:.2rem;">2. Preprocessed Image</div>
+            <img class="detail-img" src="${s.preprocessed_image ? '/' + s.preprocessed_image.replace(/\\/g,'/') : ''}" alt="Preprocessed" style="cursor:pointer;max-height:170px;object-fit:contain;border-radius:8px;border:1px solid var(--border);" onclick="showImageModal('${s.preprocessed_image ? '/' + s.preprocessed_image.replace(/\\/g,'/') : ''}','Preprocessed Image — ${esc(s.screening_id)}')" onerror="this.style.display='none';this.nextElementSibling.style.display='block';" />
+            <div style="display:none;font-size:.72rem;color:#c73e3e;">Not generated</div>
+          </div>
+          <div>
+            <div style="font-size:.78rem;font-weight:600;color:var(--text-secondary);margin-bottom:.2rem;">3. Segmented Image</div>
+            <img class="detail-img" src="${s.segmented_image ? '/' + s.segmented_image.replace(/\\/g,'/') : ''}" alt="Segmented" style="cursor:pointer;max-height:170px;object-fit:contain;border-radius:8px;border:1px solid var(--border);" onclick="showImageModal('${s.segmented_image ? '/' + s.segmented_image.replace(/\\/g,'/') : ''}','Segmented Image — ${esc(s.screening_id)}')" onerror="this.style.display='none';this.nextElementSibling.style.display='block';" />
+            <div style="display:none;font-size:.72rem;color:#c73e3e;">Not generated</div>
+          </div>
+          <div>
+            <div style="font-size:.78rem;font-weight:600;color:var(--text-secondary);margin-bottom:.2rem;">4. Classified Resultant</div>
+            <img class="detail-img" src="${s.classified_image ? '/' + s.classified_image.replace(/\\/g,'/') : ''}" alt="Classified" style="cursor:pointer;max-height:170px;object-fit:contain;border-radius:8px;border:1px solid var(--border);" onclick="showImageModal('${s.classified_image ? '/' + s.classified_image.replace(/\\/g,'/') : ''}','Classified Resultant — ${esc(s.screening_id)}')" onerror="this.style.display='none';this.nextElementSibling.style.display='block';" />
+            <div style="display:none;font-size:.72rem;color:#c73e3e;">Not generated</div>
+          </div>
+          <div>
+            <div style="font-size:.78rem;font-weight:600;color:var(--text-secondary);margin-bottom:.2rem;">5. Grad-CAM</div>
+            <img class="detail-img" src="${heatPath}" alt="Grad-CAM" style="cursor:pointer;max-height:170px;object-fit:contain;border-radius:8px;border:1px solid var(--border);" onclick="showImageModal('${heatPath}','Grad-CAM — ${esc(s.screening_id)}')" onerror="this.style.display='none';this.nextElementSibling.style.display='block';" />
+            <div style="display:none;font-size:.72rem;color:#c73e3e;">Not generated</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:.6rem;">
         <h2>Retinal Image — Original</h2>
         <div style="text-align:center;">
           <img class="detail-img" src="/api/screenings/${encodeURIComponent(s.screening_id)}/image" alt="Original retinal image" style="cursor:pointer;max-height:320px;object-fit:contain;" onclick="showImageModal('/api/screenings/${encodeURIComponent(s.screening_id)}/image','Original Retinal Image — ${esc(s.screening_id)}')" onerror="this.outerHTML='<div class=empty-state><div class=ic>&#9888;</div><h3>Image unavailable</h3><p>The original retinal image could not be loaded for this screening.</p></div>'" />
@@ -1358,6 +1980,255 @@ async function openScreeningDetail(sid, retView) {
     $("screening-area").innerHTML = html;
   } catch (e) {
     $("screening-area").innerHTML = '<div class="empty-state"><h3>Screening not found</h3><p>The record may have been deleted.</p><button class="btn btn-secondary btn-sm" onclick="navTo(\'dashboard\')">Back to Dashboard</button></div>';
+  }
+}
+
+/* ===== PENDING REVIEWS ===== */
+async function loadPendingReviews() {
+  const c = $("pending-reviews-list");
+  c.innerHTML = '<div class="loading"><span class="spinner"></span> Loading pending screenings...</div>';
+  try {
+    const screenings = await fetch(BASE+"/screenings?review_status=PENDING&limit=50").then(r=>r.json());
+    if (!screenings || screenings.length===0) {
+      c.innerHTML = '<div class="empty-state"><div class="ic">&#128300;</div><h3>No pending reviews</h3><p>All screenings have been reviewed or are awaiting upload.</p><button class="btn btn-primary btn-sm" onclick="showScreen()">New Screening</button></div>';
+      return;
+    }
+    c.innerHTML = screenings.map(s => {
+      const isRisk = s.prediction >= 0.5;
+      return `<div class="list-card" onclick="openScreeningForReview('${esc(s.screening_id)}')">
+        <div class="lc-avatar" style="background:${isRisk?'linear-gradient(135deg,#c73e3e,#e74c3c)':'linear-gradient(135deg,#1b8e4b,#27ae60)'};">${isRisk?"&#9888;":"&#10003;"}</div>
+        <div class="lc-meta">
+          <h4>${esc(s.screening_id)} &middot; ${esc(s.patient_id)}</h4>
+          <p>${fmtDate(s.date, true)}</p>
+          <span class="sc-badge ${isRisk?'risk':'ok'}">${isRisk?"DR Present":"No DR"} &middot; ${(s.confidence*100).toFixed(1)}%</span>
+        </div>
+      </div>`;
+    }).join("");
+  } catch (e) {
+    c.innerHTML = `<div class="empty-state"><h3>${t('Unable to load pending reviews')}</h3><p>${t('Please try again.')}</p></div>`;
+  }
+}
+
+function showPendingReviewsList() {
+  navTo("pending-reviews");
+  loadPendingReviews();
+}
+
+/* ===== CLINICIAN REVIEW FORM ===== */
+let currentReviewScreening = null;
+
+async function openScreeningForReview(screeningId, retView) {
+  returnToView = retView || null;
+  navTo("screening");
+  $("screening-area").innerHTML = '<div class="loading"><span class="spinner"></span> Loading screening for review...</div>';
+  try {
+    const s = await fetch(BASE+"/screenings/"+encodeURIComponent(screeningId)).then(r=>{ if(!r.ok) throw new Error("not found"); return r.json(); });
+    currentReviewScreening = s;
+    const isRisk = s.prediction >= 0.5;
+    const imgPath = s.image_path ? "/" + s.image_path.replace(/\\/g,"/") : "";
+    const heatPath = s.gapcam_path ? "/" + s.gapcam_path.replace(/\\/g,"/") : "";
+
+    // Build clinician review form
+    const clinicianReviewSection = s.review_status === "COMPLETED" ? `
+      <div class="card" style="margin-bottom:.6rem;">
+        <h2>Clinician Assessment (Completed)</h2>
+        <div class="detail-grid">
+          <div class="detail-item"><div class="lbl">Assessment</div><div class="val">${esc(s.clinician_assessment||"—")}</div></div>
+          <div class="detail-item"><div class="lbl">Clinician</div><div class="val">${esc(s.clinician_id||"—")}</div></div>
+          <div class="detail-item"><div class="lbl">Status</div><div class="val" style="color:var(--safe);">COMPLETED</div></div>
+          <div class="detail-item"><div class="lbl">Reviewed At</div><div class="val">${fmtDate(s.clinician_reviewed_at, true)}</div></div>
+        </div>
+        ${s.clinician_confidence ? `<div class="detail-grid" style="margin-top:.4rem;"><div class="detail-item"><div class="lbl">Clinician Confidence</div><div class="val">${(s.clinician_confidence*100).toFixed(1)}%</div></div></div>` : ""}
+        ${s.override_reason ? `<div style="margin-top:.4rem;padding:.6rem;background:var(--surface-2);border-radius:10px;border-left:3px solid var(--warn);"><div style="font-size:.75rem;color:var(--text-subtle);font-weight:600;">Override Reason</div><div style="font-size:.85rem;color:var(--text-secondary);margin-top:.2rem;">${esc(s.override_reason)}</div></div>` : ""}
+      </div>` : `
+      <div class="card" style="margin-bottom:.6rem;">
+        <h2>Clinician Assessment</h2>
+        <div class="form-error" id="review-error" style="display:none;"></div>
+        <form onsubmit="submitClinicianReview(event, '${esc(screeningId)}')">
+          <div class="form-group">
+            <label for="cr-assessment">Assessment *</label>
+            <select id="cr-assessment" onchange="checkOverrideRequired('${esc(screeningId)}', '${s.prediction}')" required>
+              <option value="">Select assessment...</option>
+              <option value="NO_DR">No Diabetic Retinopathy</option>
+              <option value="DR_PRESENT">Diabetic Retinopathy Present</option>
+              <option value="UNGRADABLE">Image Not Gradable</option>
+              <option value="OTHER">Other Finding</option>
+              <option value="UNCERTAIN">Uncertain - Requires Further Evaluation</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="cr-confidence">Clinician Confidence (0-100%)</label>
+            <div style="display:flex;gap:.5rem;align-items:center;">
+              <input type="range" id="cr-confidence" min="0" max="100" value="50" style="flex:1;" oninput="$('cr-conf-display').textContent=this.value+'%'" />
+              <span id="cr-conf-display" style="font-weight:600;min-width:50px;text-align:right;">50%</span>
+            </div>
+          </div>
+
+          <div class="form-group" id="override-reason-group" style="display:none;">
+            <label for="cr-override-reason">Override Reason *</label>
+            <textarea id="cr-override-reason" rows="3" placeholder="Explain why your assessment differs from AI result or why the image is not gradable..."></textarea>
+            <div class="err" id="cr-override-err"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="cr-notes">Clinical Notes (optional)</label>
+            <textarea id="cr-notes" rows="2" placeholder="Additional clinical observations..."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block" id="cr-submit">Submit Assessment</button>
+        </form>
+      </div>`;
+
+    const html = `
+      <div class="card" style="margin-bottom:.6rem;">
+        <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.5rem;">
+          <div style="width:42px;height:42px;border-radius:12px;background:${isRisk?'var(--danger-soft)':'var(--safe-soft)'};color:${isRisk?'var(--danger)':'var(--safe)'};display:flex;align-items:center;justify-content:center;font-size:1.2rem;">${isRisk?"&#9888;":"&#10003;"}</div>
+          <div>
+            <div style="font-size:1rem;font-weight:800;letter-spacing:-0.3px;">AI-Assisted Screening: ${isRisk?"DR Present":"No DR Detected"}</div>
+            <div style="font-size:.76rem;color:var(--text-subtle);">${esc(s.screening_id)} &middot; ${fmtDate(s.date, true)}</div>
+          </div>
+        </div>
+        <div class="detail-grid" style="grid-template-columns:1fr 1fr;">
+          <div class="detail-item"><div class="lbl">AI Result</div><div class="val lg" style="color:${isRisk?'var(--danger)':'var(--safe)'};">${isRisk?"DR Present":"No DR"}</div></div>
+          <div class="detail-item"><div class="lbl">AI Confidence</div><div class="val lg">${(s.confidence*100).toFixed(1)}%</div></div>
+          <div class="detail-item"><div class="lbl">Model</div><div class="val">${esc(s.model_version||"EfficientNetV2B0")}</div></div>
+          <div class="detail-item"><div class="lbl">Threshold</div><div class="val">${(s.threshold||0.5).toFixed(2)}</div></div>
+        </div>
+        <div style="margin-top:.6rem;padding:.6rem;background:#f0f9ff;border-left:3px solid #0284c7;border-radius:6px;font-size:.75rem;color:#075985;line-height:1.5;">
+          <strong>⚠️ AI-Assisted Screening:</strong> This is an AI-assisted screening result, not a clinical diagnosis. It does not replace evaluation by a qualified ophthalmologist. Clinical decisions must be made by a licensed healthcare professional after careful examination.
+        </div>
+      </div>
+
+      ${clinicianReviewSection}
+
+      <div class="card" style="margin-bottom:.6rem;">
+        <h2>Patient</h2>
+        <div class="detail-grid" style="grid-template-columns:1fr 1fr;">
+          <div class="detail-item"><div class="lbl">Name</div><div class="val">${esc(s.patient_name||"—")}</div></div>
+          <div class="detail-item"><div class="lbl">Patient ID</div><div class="val">${esc(s.patient_id)}</div></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:.6rem;">
+        <h2>Retinal Image</h2>
+        <div style="text-align:center;">
+          <img class="detail-img" src="/api/screenings/${encodeURIComponent(s.screening_id)}/image" alt="Original retinal image" style="cursor:pointer;max-height:320px;object-fit:contain;" onclick="showImageModal('/api/screenings/${encodeURIComponent(s.screening_id)}/image','Original Retinal Image — ${esc(s.screening_id)}')" onerror="this.outerHTML='<div class=empty-state><div class=ic>&#9888;</div><h3>Image unavailable</h3></div>'" />
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:.6rem;">
+        <h2>AI Explainability (Grad-CAM)</h2>
+        <div style="text-align:center;">
+          <img class="detail-img" src="/api/screenings/${encodeURIComponent(s.screening_id)}/heatmap" alt="Grad-CAM heatmap" style="cursor:pointer;max-height:320px;object-fit:contain;" onclick="showImageModal('/api/screenings/${encodeURIComponent(s.screening_id)}/heatmap','Grad-CAM Heatmap — ${esc(s.screening_id)}')" onerror="this.outerHTML='<div class=empty-state><div class=ic>&#9888;</div><h3>Grad-CAM unavailable</h3></div>'" />
+        </div>
+      </div>
+
+      <div style="display:flex;gap:.4rem;flex-wrap:wrap;">
+        <button class="btn btn-secondary btn-sm" onclick="openProfile('${esc(s.patient_id)}')">View Patient</button>
+        <button class="btn btn-secondary btn-sm" onclick="navBack()">Back</button>
+      </div>`;
+
+    $("screening-area").innerHTML = html;
+  } catch (e) {
+    $("screening-area").innerHTML = '<div class="empty-state"><h3>Screening not found</h3><p>Please try again.</p><button class="btn btn-secondary btn-sm" onclick="navBack()">Back</button></div>';
+  }
+}
+
+function checkOverrideRequired(screeningId, aiPrediction) {
+  const assessment = $("cr-assessment").value;
+  const overrideGroup = $("override-reason-group");
+  const overrideField = $("cr-override-reason");
+
+  // Determine if override is required
+  const aiSaysDR = (parseFloat(aiPrediction) >= 0.5);
+  const nonDiagnostic = ["UNGRADABLE", "OTHER", "UNCERTAIN"].includes(assessment);
+  const disagrees = (aiSaysDR && assessment === "NO_DR") || (!aiSaysDR && assessment === "DR_PRESENT");
+
+  const isOverride = disagrees || nonDiagnostic;
+
+  if (isOverride) {
+    overrideGroup.style.display = "block";
+    overrideField.required = true;
+  } else {
+    overrideGroup.style.display = "none";
+    overrideField.required = false;
+    overrideField.value = "";
+  }
+}
+
+async function submitClinicianReview(e, screeningId) {
+  e.preventDefault();
+
+  const assessment = $("cr-assessment").value.trim();
+  const confidence = parseFloat($("cr-confidence").value) / 100; // Convert percentage to 0-1
+  const overrideReason = $("cr-override-reason").value.trim();
+  const notes = $("cr-notes").value.trim();
+  const errorEl = $("review-error");
+  const submitBtn = $("cr-submit");
+
+  // Validate
+  if (!assessment) {
+    errorEl.textContent = "Please select an assessment";
+    errorEl.style.display = "block";
+    return;
+  }
+
+  if (isNaN(confidence) || confidence < 0 || confidence > 1) {
+    errorEl.textContent = "Confidence must be between 0 and 100%";
+    errorEl.style.display = "block";
+    return;
+  }
+
+  // Check if override reason is required
+  const s = currentReviewScreening;
+  const aiPrediction = s.prediction;
+  const aiSaysDR = (aiPrediction >= 0.5);
+  const nonDiagnostic = ["UNGRADABLE", "OTHER", "UNCERTAIN"].includes(assessment);
+  const disagrees = (aiSaysDR && assessment === "NO_DR") || (!aiSaysDR && assessment === "DR_PRESENT");
+  const isOverride = disagrees || nonDiagnostic;
+
+  if (isOverride && !overrideReason) {
+    $("cr-override-err").textContent = "Override reason is required";
+    errorEl.textContent = "Please provide an override reason";
+    errorEl.style.display = "block";
+    return;
+  }
+
+  errorEl.style.display = "none";
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Submitting...";
+
+  try {
+    const formData = new FormData();
+    formData.append("clinician_id", "CL-000001"); // Use default clinician for now
+    formData.append("clinician_assessment", assessment);
+    formData.append("clinician_confidence", confidence);
+    if (overrideReason) formData.append("override_reason", overrideReason);
+    if (notes) formData.append("clinician_notes", notes);
+
+    const res = await fetch(BASE+"/screenings/"+encodeURIComponent(screeningId)+"/clinician-review", {
+      method: "POST",
+      body: formData
+    });
+
+    const data = await res.json();
+
+    if (res.ok && data.ok) {
+      toast("Assessment submitted successfully", "ok");
+      setTimeout(() => {
+        openScreeningForReview(screeningId, returnToView);
+      }, 500);
+    } else {
+      errorEl.textContent = data.detail || "Could not submit assessment";
+      errorEl.style.display = "block";
+    }
+  } catch (err) {
+    errorEl.textContent = "Network error. Please try again.";
+    errorEl.style.display = "block";
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Submit Assessment";
   }
 }
 

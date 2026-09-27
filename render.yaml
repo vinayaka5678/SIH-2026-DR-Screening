@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: sih-dr-screening
+    env: python
+    buildCommand: pip install -r requirements_app.txt
+    startCommand: uvicorn app.backend.main:app --host 0.0.0.0 --port $PORT
+    branch: master
